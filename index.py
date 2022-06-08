@@ -1,34 +1,36 @@
 def read_file(path):
-    with open(path) as file:
-        for line in file:
-            if(line == '\n'):
-                pass
-            else:
-                yield line.split()
-                
-def generate_adjacency_list(path):
-    adjacency_list = {}
+    data = {
+        'information': [],
+        'edges': []
+    }
     is_first_iteration = True
     
-    for element in (read_file(path)):
-        if(is_first_iteration):
-            is_first_iteration = False
-            graph = {
-                'name': element[0],
-                'n': element[1],
-                'm': element[2],
-            }
-        else:
-            element_in_the_adj_list = element[0] in list(adjacency_list.keys())
-            
-            if(element_in_the_adj_list):
-                adjacency_list[element[0]].append(element[1])
+    with open(path) as file:
+        for line in file:
+            if(is_first_iteration):
+                is_first_iteration = False
+                data['information'] = line.split()
+            elif(line == '\n'):
+                continue
             else:
-                adjacency_list[element[0]] = [element[1]]
-                
-    graph['adjacency_list'] = adjacency_list
+                data['edges'].append(line.split())
     
-    return graph
+    return data
+                
+def generate_adjacency_list(edges):
+    adjacency_list = {}
+    
+    for edge in edges:
+        vertex_in_the_adj_list = edge[0] in list(adjacency_list.keys())
+        
+        if(vertex_in_the_adj_list):
+            adjacency_list[edge[0]].append(edge[1])
+        else:
+            adjacency_list[edge[0]] = [edge[1]]
+    
+    return adjacency_list
 
 
-print(generate_adjacency_list("graph.txt"))
+g = read_file("graph.txt")
+
+print(generate_adjacency_list(g['edges']))
