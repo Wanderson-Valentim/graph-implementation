@@ -30,7 +30,21 @@ def generate_adjacency_list(edges):
     
     return adjacency_list
 
+def generate_adjacency_matrix(edges):
+    adjacency_matrix = [[0 for _ in range(5)] for _ in range(5)]
+    
+    for edge in edges:
+        vertex1 = edge[0]
+        vertex2 = edge[1]
+        vi = int(vertex1[1]) - 1
+        vj = int(vertex2[1]) - 1
+        adjacency_matrix[vi][vj] = 1
+
+    return adjacency_matrix
+
 
 g = read_file("graph.txt")
 
-print(generate_adjacency_list(g['edges']))
+t = generate_adjacency_matrix(g['edges'])
+
+print(t)
