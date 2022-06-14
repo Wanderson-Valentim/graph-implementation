@@ -16,19 +16,24 @@ def read_file(path):
                 data['edges'].append(line.split())
     
     return data
-                
+
+def createNode(graph, key, neighboor, weight):
+    if key in graph:
+        graph[key][neighboor] = weight
+    else:
+        graph[key] = {}
+        graph[key][neighboor] = weight
+
 def generate_adjacency_list(edges):
-    adjacency_list = {}
-    
+    graph = {}
     for edge in edges:
-        vertex_in_the_adj_list = edge[0] in list(adjacency_list.keys())
-        
-        if(vertex_in_the_adj_list):
-            adjacency_list[edge[0]].append(edge[1])
-        else:
-            adjacency_list[edge[0]] = [edge[1]]
+        key = edge[0]
+        if(len(edge) > 1):
+            neighbor = edge[1]
+            weight = edge[2]
+            createNode(graph, key, neighbor, weight)
     
-    return adjacency_list
+    return graph
 
 def generate_adjacency_matrix(edges):
     adjacency_matrix = [[0 for _ in range(5)] for _ in range(5)]
@@ -42,9 +47,8 @@ def generate_adjacency_matrix(edges):
 
     return adjacency_matrix
 
-
 g = read_file("graph.txt")
 
-t = generate_adjacency_matrix(g['edges'])
+t = generate_adjacency_list(g['edges'])
 
 print(t)
