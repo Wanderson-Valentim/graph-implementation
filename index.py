@@ -35,8 +35,9 @@ def generate_adjacency_list(edges):
     
     return graph
 
-def generate_adjacency_matrix(edges):
-    adjacency_matrix = [[0 for _ in range(5)] for _ in range(5)]
+def generate_adjacency_matrix(edges, num_of_vertices):
+    adjacency_matrix = [[0 for _ in range(num_of_vertices)]
+                        for _ in range(num_of_vertices)]
     
     for edge in edges:
         vertex1 = edge[0]
