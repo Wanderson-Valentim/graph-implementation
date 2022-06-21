@@ -1,3 +1,6 @@
+from graph import Graph
+
+#Questão 1
 def read_file(file_name):
     data = {
         'information': [],
@@ -16,3 +19,11 @@ def read_file(file_name):
                 data['edges'].append(line.split())
     
     return data
+
+#Questão 3 - Item (a)
+def newGraph(name):
+    graph = Graph(name)
+    return graph
+
+#Questão 3 - Item (c)
+
