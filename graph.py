@@ -115,6 +115,51 @@ class Graph:
         return removed_vi_vj
     
     def check_if_is_adjacent(self, vi, vj):
+        has_vi = self.has_vertex(vi)
+        has_vj = self.has_vertex(vj)
+        
+        if not has_vi:
+            raise ExceptionVertexDoesNotExist
+        
+        elif not has_vj:
+            raise ExceptionVertexDoesNotExist
+        
         is_adjacent = vj in self.adjacency_list[vi].keys()
         
         return is_adjacent  
+    
+    def change_edge_weight(self, vi, vj, old_w, new_w):
+        has_edge = self.has_edge(vi, vj, old_w)
+        has_been_changed = False
+        
+        if has_edge:
+            edge = [vi, vj, old_w]
+            index = self.edges.index(edge)
+            self.edges[index] = [vi, vj, new_w]
+            
+            self.adjacency_list[vi][vj] = new_w
+        
+            has_been_changed = True
+            
+        return has_been_changed
+    
+    def regain_edge_weight(self, vi, vj):
+        has_vi = self.has_vertex(vi)
+        has_vj = self.has_vertex(vj)
+        
+        if not has_vi:
+            raise ExceptionVertexDoesNotExist
+        
+        elif not has_vj:
+            raise ExceptionVertexDoesNotExist
+        
+        is_adjacent = self.check_if_is_adjacent(vi, vj)
+        
+        if is_adjacent:
+            weight = self.adjacency_list[vi][vj]
+            return  weight
+        
+        else:
+            raise ExceptionEdgeDoesNotExist
+        
+    

@@ -1,6 +1,9 @@
 class ExceptionVertexDoesNotExist(Exception):
     pass 
 
+class ExceptionEdgeDoesNotExist(Exception):
+    pass 
+
 class ExceptionCouldNotAddEdge(Exception):
     pass 
 

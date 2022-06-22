@@ -73,6 +73,11 @@ def home_screen():
         print('\n------------------------IMPLEMENTAÇÃO GRAFOS------------------------\n')
         print('\t--> Opção Inválida. Escolha Novamente!')
         print('\n--------------------------------------------------------------------\n')
+    except:
+        os.system('cls')
+        print('\n------------------------IMPLEMENTAÇÃO GRAFOS------------------------\n')
+        print('\t--> Opção Inválida. Escolha Novamente!')
+        print('\n--------------------------------------------------------------------\n')
     
     return dont_close_program
     
@@ -121,17 +126,17 @@ def options_screen(graph):
     
 def basic_operations_screen(graph):
     print('\tTela Anterior (0)')
-    print('\tAdicionar Aresta (1)')
-    print('\tRemover Aresta (2)')
-    print('\tMudar Peso (3)')
-    print('\tRecupera Peso (4)')
+    print('\tAdicionar Aresta (1)') #OK
+    print('\tRemover Aresta (2)') #OK
+    print('\tMudar Peso (3)') #Ajustar Excecoes
+    print('\tRecupera Peso (4)') #OK
     print('\tIncidência (5)')
-    print('\tVerificar se Vértice Pertence ao Grafo (6)')
-    print('\tVerificar se Aresta Pertence ao Grafo (7)')
+    print('\tVerificar se Vértice Pertence ao Grafo (6)') #OK
+    print('\tVerificar se Aresta Pertence ao Grafo (7)') #OK
     print('\tImprime Matriz de Adjacências (8)')
     print('\tImprime Lista de Adjacências (9)')
     print('\tImprime Lista de Adjacências de um Vértice (10)')
-    print('\tVerifica se é Vizinho (11)')
+    print('\tVerifica se é Vizinho (11)') #OK
     print('\tVerifica se Gafro é Simples (12)')
     print('\tVerifica se Gafro é Conexo (13)')
     print('\tVerifica se Gafro é Bipartido (14)\n')
@@ -149,7 +154,7 @@ def basic_operations_screen(graph):
             vj = input('\tDigite o vertice vj -> ')
             w = input('\tDigite o peso w -> ')
             os.system('cls')
-            print('\n-------------------------------OPÇÕES-------------------------------\n')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
             
             added_edge = graph.add_edge(vi, vj, w)
             if added_edge:
@@ -163,7 +168,7 @@ def basic_operations_screen(graph):
             vj = input('\tDigite o vertice vj -> ')
             w = input('\tDigite o peso w -> ')
             os.system('cls')
-            print('\n-------------------------------OPÇÕES-------------------------------\n')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
             
             remove_edge = graph.remove_edge(vi, vj, w)
             if remove_edge:
@@ -173,31 +178,102 @@ def basic_operations_screen(graph):
                 raise ExceptionUnableToRemoveEdge
         
         elif choise == 3:
-            print('')
+            vi = input('\tDigite o vertice vi -> ')
+            vj = input('\tDigite o vertice vj -> ')
+            old_w = input('\tDigite o atual peso w -> ')
+            new_w = input('\tDigite o novo peso w -> ')
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+            has_been_changed = graph.change_edge_weight(vi, vj, old_w, new_w)
+            
+            if has_been_changed:
+                save_graph(graph.name, graph.n, graph.m, graph.edges)
+                basic_operations_screen(graph)
+            else:
+                raise ExceptionUnableToRemoveEdge
             
         elif choise == 4:
-            print('')
-            
+            vi = input('\tDigite o vertice vi -> ')
+            vj = input('\tDigite o vertice vj -> ')
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+            weight = graph.regain_edge_weight(vi, vj)
+            print(f'\t--> O Peso da Aresta {vi}, {vj} é {weight}')
+            print('\n--------------------------------------------------------------------\n')
+            basic_operations_screen(graph)
+
         elif choise == 5:
             print('')
             
         elif choise == 6:
-            print('')
+            vi = input('\tDigite o vertice vi -> ')
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+            
+            is_adjacent = graph.has_vertex(vi)
+            if is_adjacent:
+                print(f'\t--> {vi} Pertence ao Grafo.')
+            else:
+                print(f'\t--> {vi} Não Pertence ao Grafo.')
+                
+            print('\n--------------------------------------------------------------------\n')
+            basic_operations_screen(graph)
             
         elif choise == 7:
-            print('')
+            vi = input('\tDigite o vertice vi -> ')
+            vj = input('\tDigite o vertice vj -> ')
+            w = input('\tDigite o peso w -> ')
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+            
+            has_edge = graph.has_edge(vi, vj, w)
+            if has_edge:
+                print(f'\t--> A Aresta {vi}, {vj} Com Peso {w} Pertencem ao Grafo.')
+            else:
+                print(f'\t--> A Aresta {vi}, {vj} Com Peso {w} Não Pertencem ao Grafo.')
+                
+            print('\n--------------------------------------------------------------------\n')
+            basic_operations_screen(graph)
             
         elif choise == 8:
             print('')
             
         elif choise == 9:
-            print('')
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+            print(f'\t--> Lista de Adjacências do Grafo {graph.name}')
+            for vertex in graph.adjacency_list:         
+                print_adjacency_list(graph.adjacency_list, vertex)
+            print('\n--------------------------------------------------------------------\n')
+            basic_operations_screen(graph)
             
         elif choise == 10:
-            print('')
+            vertex = input('\tDigite o vertice vi -> ')
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+            print(f'\t--> Lista de Adjacências do Vértice {vertex}')
+            has_vertex = graph.has_vertex(vertex)
+            if has_vertex:
+                print_adjacency_list(graph.adjacency_list, vertex)
+            else:
+                raise ExceptionVertexDoesNotExist
+            print('\n--------------------------------------------------------------------\n')
+            basic_operations_screen(graph)
             
         elif choise == 11:
-            print('')
+            vi = input('\tDigite o vertice vi -> ')
+            vj = input('\tDigite o vertice vj -> ')
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+            
+            is_adjacent = graph.check_if_is_adjacent(vi, vj)
+            if is_adjacent:
+                print(f'\t--> {vi} e {vj} São Adjacentes.')
+            else:
+                print(f'\t--> {vi} e {vj} Não São Adjacentes.')
+                
+            print('\n--------------------------------------------------------------------\n')
+            basic_operations_screen(graph)
             
         elif choise == 12:
             print('')
@@ -210,7 +286,13 @@ def basic_operations_screen(graph):
             
         else:
             raise ExceptionInvalidOperation
-    
+        
+    except ExceptionEdgeDoesNotExist:
+        os.system('cls')
+        print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+        print('\t--> Aresta Não Existe!')
+        print('\n--------------------------------------------------------------------\n')
+        basic_operations_screen(graph)
     except ExceptionCouldNotAddEdge:
         os.system('cls')
         print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
@@ -306,5 +388,6 @@ def menu():
     while works:
         works = home_screen()
 
+
+
 menu()
-#os.system('cls')
