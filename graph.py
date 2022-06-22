@@ -58,18 +58,27 @@ class Graph:
             raise ExceptionVertexDoesNotExist
         
         else:
-            has_vertex_in_vi = vj in self.adjacency_list[vi].keys()
+            has_vertex_in_vi = self.check_if_is_adjacent(vi, vj)
+            w_is_equal = w == self.adjacency_list[vi][vj]
             
-            if has_vertex_in_vi:
+            if has_vertex_in_vi and w_is_equal:
                 has_vi_vj = True
         
         return has_vi_vj
     
     def add_edge(self, vi, vj, w):
-        has_vi_vj = self.has_edge(vi, vj, w)
+        has_vi = self.has_vertex(vi)
+        has_vj = self.has_vertex(vj)
+        has_vj_in_vi = self.check_if_is_adjacent(vi, vj)
         added_vi_vj = False
         
-        if not has_vi_vj:
+        if not has_vi:
+            raise ExceptionVertexDoesNotExist
+        
+        elif not has_vj:
+            raise ExceptionVertexDoesNotExist
+        
+        elif has_vj_in_vi == False:
             #Adiciona a aresta em edges
             self.edges.append([vi, vj, w])
             
@@ -77,14 +86,14 @@ class Graph:
             self.adjacency_list[vi][vj] = w 
             
             #Adiciona a aresta na matriz de adjacencias
-            i, j = int(vi[1]), int(vj[1])
+            i, j = int(vi[1]) - 1, int(vj[1]) - 1
             self.adjacency_matrix[i][j] = 1
             
             added_vi_vj = True
         
         return added_vi_vj
         
-    def remove_vertex(self, vi, vj, w):
+    def remove_edge(self, vi, vj, w):
         has_vi_vj = self.has_edge(vi, vj, w)
         removed_vi_vj = False
         
@@ -98,9 +107,14 @@ class Graph:
             self.adjacency_list.pop(vi)
             
             #Remove a aresta da matriz de adjacencias
-            i, j = int(vi[1]), int(vj[1])
+            i, j = int(vi[1]) - 1, int(vj[1]) - 1
             self.adjacency_matrix[i][j] = 0
             
             removed_vi_vj = True
         
         return removed_vi_vj
+    
+    def check_if_is_adjacent(self, vi, vj):
+        is_adjacent = vj in self.adjacency_list[vi].keys()
+        
+        return is_adjacent  

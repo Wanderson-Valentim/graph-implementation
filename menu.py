@@ -158,7 +158,20 @@ def basic_operations_screen(graph):
             else:
                 raise ExceptionCouldNotAddEdge
             
+        elif choise == 2:
+            vi = input('\tDigite o vertice vi -> ')
+            vj = input('\tDigite o vertice vj -> ')
+            w = input('\tDigite o peso w -> ')
+            os.system('cls')
+            print('\n-------------------------------OPÇÕES-------------------------------\n')
             
+            remove_edge = graph.remove_edge(vi, vj, w)
+            if remove_edge:
+                save_graph(graph.name, graph.n, graph.m, graph.edges)
+                basic_operations_screen(graph)
+            else:
+                raise ExceptionUnableToRemoveEdge
+        
         elif choise == 3:
             print('')
             
@@ -197,11 +210,17 @@ def basic_operations_screen(graph):
             
         else:
             raise ExceptionInvalidOperation
-        
+    
     except ExceptionCouldNotAddEdge:
         os.system('cls')
         print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
-        print('\t--> Não foi possível adicionar aresta!')
+        print('\t--> Não Foi Possível Adicionar Aresta!')
+        print('\n--------------------------------------------------------------------\n')
+        basic_operations_screen(graph)
+    except ExceptionUnableToRemoveEdge:
+        os.system('cls')
+        print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+        print('\t--> Não Foi Possível Remover Aresta!')
         print('\n--------------------------------------------------------------------\n')
         basic_operations_screen(graph)
     except ExceptionVertexDoesNotExist:
@@ -216,7 +235,7 @@ def basic_operations_screen(graph):
         print('\t--> Opção Inválida. Escolha Novamente!')
         print('\n--------------------------------------------------------------------\n')
         basic_operations_screen(graph)
-    except:
+    except :
         os.system('cls')
         print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
         print('\t--> Opção Inválida. Escolha Novamente!')

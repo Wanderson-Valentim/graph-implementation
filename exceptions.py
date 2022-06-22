@@ -6,3 +6,6 @@ class ExceptionCouldNotAddEdge(Exception):
 
 class ExceptionInvalidOperation(Exception):
     pass 
+
+class ExceptionUnableToRemoveEdge(Exception):
+    pass
