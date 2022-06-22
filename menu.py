@@ -129,13 +129,13 @@ def basic_operations_screen(graph):
     print('\tAdicionar Aresta (1)') #OK
     print('\tRemover Aresta (2)') #OK
     print('\tMudar Peso (3)') #Ajustar Excecoes
-    print('\tRecupera Peso (4)') #OK
+    print('\tRecupera Peso (4)')
     print('\tIncidência (5)')
     print('\tVerificar se Vértice Pertence ao Grafo (6)') #OK
     print('\tVerificar se Aresta Pertence ao Grafo (7)') #OK
     print('\tImprime Matriz de Adjacências (8)')
-    print('\tImprime Lista de Adjacências (9)')
-    print('\tImprime Lista de Adjacências de um Vértice (10)')
+    print('\tImprime Lista de Adjacências (9)') #Ok
+    print('\tImprime Lista de Adjacências de um Vértice (10)') #OK
     print('\tVerifica se é Vizinho (11)') #OK
     print('\tVerifica se Gafro é Simples (12)')
     print('\tVerifica se Gafro é Conexo (13)')
@@ -190,17 +190,18 @@ def basic_operations_screen(graph):
                 save_graph(graph.name, graph.n, graph.m, graph.edges)
                 basic_operations_screen(graph)
             else:
-                raise ExceptionUnableToRemoveEdge
+                raise ExceptionEdgeDoesNotExist
             
         elif choise == 4:
-            vi = input('\tDigite o vertice vi -> ')
+            '''vi = input('\tDigite o vertice vi -> ')
             vj = input('\tDigite o vertice vj -> ')
             os.system('cls')
             print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
             weight = graph.regain_edge_weight(vi, vj)
             print(f'\t--> O Peso da Aresta {vi}, {vj} é {weight}')
             print('\n--------------------------------------------------------------------\n')
-            basic_operations_screen(graph)
+            basic_operations_screen(graph)'''
+            print('')
 
         elif choise == 5:
             print('')
@@ -287,22 +288,10 @@ def basic_operations_screen(graph):
         else:
             raise ExceptionInvalidOperation
         
-    except ExceptionEdgeDoesNotExist:
-        os.system('cls')
-        print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
-        print('\t--> Aresta Não Existe!')
-        print('\n--------------------------------------------------------------------\n')
-        basic_operations_screen(graph)
     except ExceptionCouldNotAddEdge:
         os.system('cls')
         print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
         print('\t--> Não Foi Possível Adicionar Aresta!')
-        print('\n--------------------------------------------------------------------\n')
-        basic_operations_screen(graph)
-    except ExceptionUnableToRemoveEdge:
-        os.system('cls')
-        print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
-        print('\t--> Não Foi Possível Remover Aresta!')
         print('\n--------------------------------------------------------------------\n')
         basic_operations_screen(graph)
     except ExceptionVertexDoesNotExist:
@@ -311,13 +300,19 @@ def basic_operations_screen(graph):
         print('\t--> Vértice Não Existe!')
         print('\n--------------------------------------------------------------------\n')
         basic_operations_screen(graph)
+    except ExceptionEdgeDoesNotExist:
+        os.system('cls')
+        print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+        print('\t--> Aresta Não Existe!')
+        print('\n--------------------------------------------------------------------\n')
+        basic_operations_screen(graph)
     except ExceptionInvalidOperation:
         os.system('cls')
         print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
         print('\t--> Opção Inválida. Escolha Novamente!')
         print('\n--------------------------------------------------------------------\n')
         basic_operations_screen(graph)
-    except :
+    except:
         os.system('cls')
         print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
         print('\t--> Opção Inválida. Escolha Novamente!')

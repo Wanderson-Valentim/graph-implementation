@@ -59,10 +59,12 @@ class Graph:
         
         else:
             has_vertex_in_vi = self.check_if_is_adjacent(vi, vj)
-            w_is_equal = w == self.adjacency_list[vi][vj]
             
-            if has_vertex_in_vi and w_is_equal:
-                has_vi_vj = True
+            if has_vertex_in_vi:
+                w_is_equal = w == self.adjacency_list[vi][vj]
+                
+                if w_is_equal:
+                    has_vi_vj = True
         
         return has_vi_vj
     
@@ -130,6 +132,7 @@ class Graph:
     
     def change_edge_weight(self, vi, vj, old_w, new_w):
         has_edge = self.has_edge(vi, vj, old_w)
+        
         has_been_changed = False
         
         if has_edge:
@@ -143,7 +146,8 @@ class Graph:
             
         return has_been_changed
     
-    def regain_edge_weight(self, vi, vj):
+    #Questão 3 - item j. Fiz de uma forma diferente do q pede a questão, ajeitar depois.
+    '''def regain_edge_weight(self, vi, vj):
         has_vi = self.has_vertex(vi)
         has_vj = self.has_vertex(vj)
         
@@ -160,6 +164,4 @@ class Graph:
             return  weight
         
         else:
-            raise ExceptionEdgeDoesNotExist
-        
-    
+            raise ExceptionEdgeDoesNotExist'''
