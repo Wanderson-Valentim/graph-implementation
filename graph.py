@@ -58,11 +58,11 @@ class Graph:
         
         return has_vi_vj
     
-    def add_vertex(self, vi, vj, w):
+    def add_edge(self, vi, vj, w):
         has_vi_vj = self.has_edge(vi, vj, w)
         
         if not has_vi_vj:
-            self.adjacency_list[vi][vj] = w
+            self.adjacency_list[vi][vj] = w 
         
     def remove_vertex(self, vi, vj, w):
         has_vi_vj = self.has_edge(vi, vj, w)

@@ -1,18 +1,18 @@
 import os
+from tokenize import Name
 from graph import Graph
 from functions import *
 
 def home_screen():
     dont_close_program = True
-    
-    print('Grafo a Partir de Um Arquivo (1)')
-    print('Novo Grafo (2)')
-    print('Grafo Salvo (3)')
-    print('Remove Grafo (4)')
-    print('Fechar (5)')
+    print('\tGrafo a Partir de Um Arquivo (1)')
+    print('\tNovo Grafo (2)')
+    print('\tGrafo Salvo (3)')
+    print('\tRemove Grafo (4)')
+    print('\tFechar (5)\n')
     
     try:
-        choise = int(input('Escolha a Opção: '))
+        choise = int(input('\tEscolha a Opção -> '))
         
         if choise == 1:
             data = read_file("graph")
@@ -24,12 +24,16 @@ def home_screen():
             save_graph(name, n, m, edges)
             
             graph = Graph(name, n, m, edges)
+            os.system('cls')
+            print('\n-------------------------------OPÇÕES-------------------------------\n')
             options_screen(graph)
             
         elif choise == 2:
-            name = input('Escolha o nome do Grafo: ')
+            name = input('\tEscolha o nome do Grafo: ')
             graph = Graph(name)
             save_graph(name)
+            os.system('cls')
+            print('\n-------------------------------OPÇÕES-------------------------------\n')
             options_screen(graph)
         
         elif choise == 3:
@@ -42,125 +46,216 @@ def home_screen():
                 m = int(saved['graph']['m'])
                 edges = saved['graph']['edges']
                 graph = Graph(name, n, m, edges)
+                os.system('cls')
+                print('\n-------------------------------OPÇÕES-------------------------------\n')
                 options_screen(graph)
             else:
-                print('Não Possui Grafo Salvo!')
+                os.system('cls')
+                print('\n------------------------IMPLEMENTAÇÃO GRAFOS------------------------\n')
+                print('\t--> Não Possui Grafo Salvo!')
+                print('\n--------------------------------------------------------------------\n')
             
         elif choise == 4:
+            os.system('cls')
             remove_saved_graph()
-            print('Grafo Removido!')
+            print('\n------------------------IMPLEMENTAÇÃO GRAFOS------------------------\n')
+            print('\t--> Grafo Removido!')
+            print('\n--------------------------------------------------------------------\n')
             
         elif choise == 5:
             dont_close_program = False
             
         else:
             os.system('cls')
-            print('Opção Inválida. Escolha Novamente!')
-            home_screen()
+            print('\n------------------------IMPLEMENTAÇÃO GRAFOS------------------------\n')
+            print('\t--> Opção Inválida. Escolha Novamente!')
+            print('\n--------------------------------------------------------------------\n')
             
-    except(NameError):
-        print(NameError)
-        #os.system('cls')
-        print('Opção Inválida. Escolha Novamente!')
-        home_screen()
+    except:
+        os.system('cls')
+        print('\n------------------------IMPLEMENTAÇÃO GRAFOS------------------------\n')
+        print('\t--> Opção Inválida. Escolha Novamente!')
+        print('\n--------------------------------------------------------------------\n')
     
     return dont_close_program
     
 
 def options_screen(graph):
-    os.system('cls')
-    print('Tela Anterior (0)')
-    print('Operações Básicas (1)')
-    print('Percursos (2)')
-    print('Caminhos Mínimos (3)')
+    print('\tTela Anterior (0)')
+    print('\tOperações Básicas (1)')
+    print('\tPercursos (2)')
+    print('\tCaminhos Mínimos (3)\n')
     
     try:
-        choise = int(input('Escolha a Opção: '))
+        choise = int(input('\tEscolha a Opção -> '))
         
         if choise == 0:
             os.system('cls')
-            home_screen()
+            print('\n------------------------IMPLEMENTAÇÃO GRAFOS------------------------\n')
+            return
             
         elif choise == 1:
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
             basic_operations_screen(graph)
             
         elif choise == 2:
+            os.system('cls')
+            print('\n------------------------------PERCURSOS-----------------------------\n')
             route_screen(graph)
             
         elif choise == 3:
+            os.system('cls')
+            print('\n-------------------------CAMINNHOS  MÍNIMOS-------------------------\n')
             shortest_path_screen(graph)
     
         else:
             os.system('cls')
-            print('Opção Inválida. Escolha Novamente!')
-            options_screen()
+            print('\n-------------------------------OPÇÕES-------------------------------\n')
+            print('\t--> Opção Inválida. Escolha Novamente!')
+            print('\n--------------------------------------------------------------------\n')
+            options_screen(graph)
             
     except:
         os.system('cls')
-        print('Opção Inválida. Escolha Novamente!')
-        options_screen()
+        print('\n-------------------------------OPÇÕES-------------------------------\n')
+        print('\t--> Opção Inválida. Escolha Novamente!')
+        print('\n--------------------------------------------------------------------\n')
+        options_screen(graph)
     
 def basic_operations_screen(graph):
-    os.system('cls')
-    print('Tela Anterior (0)')
-    print('Adicionar Aresta ()')
-    print('Remover Aresta ()')
-    print('Verificar se Vértice Pertence ao Grafo ()')
-    print('Verificar se Aresta Pertence ao Grafo ()')
-    print('Mudar Peso ()')
-    print('Recupera Peso ()')
-    print('Incidência ()')
-    print('Imprime Lista de Adjacências de um Vértice ()')
-    print('Imprime Lista de Adjacências ()')
-    print('Imprime Matriz de Adjacências ()')
-    print('Verifica se Gafro é Simples ()')
-    print('Verifica se Gafro é Conexo ()')
-    print('Verifica se Gafro é Bipartido ()')
-    print('Verifica se é Vizinho ()')
+    print('\tTela Anterior (0)')
+    print('\tAdicionar Aresta (1)')
+    print('\tRemover Aresta (2)')
+    print('\tMudar Peso (3)')
+    print('\tRecupera Peso (4)')
+    print('\tIncidência (5)')
+    print('\tVerificar se Vértice Pertence ao Grafo (6)')
+    print('\tVerificar se Aresta Pertence ao Grafo (7)')
+    print('\tImprime Matriz de Adjacências (8)')
+    print('\tImprime Lista de Adjacências (9)')
+    print('\tImprime Lista de Adjacências de um Vértice (10)')
+    print('\tVerifica se é Vizinho (11)')
+    print('\tVerifica se Gafro é Simples (12)')
+    print('\tVerifica se Gafro é Conexo (13)')
+    print('\tVerifica se Gafro é Bipartido (14)\n')
     
-    choise = input('Escolha a Opção: ')
+    try:
+        choise = int(input('\tEscolha a Opção -> '))
     
-    if choise == 1:
-        print('')
-    '''elif choise == 2:
-    elif choise == 3:
-    elif choise == 4:
-    else:'''
-    
+        if choise == 0:
+            os.system('cls')
+            print('\n-------------------------------OPÇÕES-------------------------------\n')
+            options_screen(graph)
+        elif choise == 1:
+            print('')
+        elif choise == 3:
+            print('')
+        elif choise == 4:
+            print('')
+        elif choise == 5:
+            print('')
+        elif choise == 6:
+            print('')
+        elif choise == 7:
+            print('')
+        elif choise == 8:
+            print('')
+        elif choise == 9:
+            print('')
+        elif choise == 10:
+            print('')
+        elif choise == 11:
+            print('')
+        elif choise == 12:
+            print('')
+        elif choise == 13:
+            print('')
+        elif choise == 14:
+            print('')
+        else:
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+            print('--> Opção Inválida. Escolha Novamente!')
+            print('\n--------------------------------------------------------------------\n')
+            basic_operations_screen(graph)
+            
+    except:
+        os.system('cls')
+        print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+        print('\t--> Opção Inválida. Escolha Novamente!')
+        print('\n--------------------------------------------------------------------\n')
+        basic_operations_screen(graph)
+
 
 def route_screen(graph):
-    print('Tela Anterior (0)')
-    print('Excutar Busca em Largura (1)')
-    print('Excutar Busca em Profundidade (2)')
+    print('\tTela Anterior (0)')
+    print('\tExcutar Busca em Largura (1)')
+    print('\tExcutar Busca em Profundidade (2)\n')
 
+    try:
+        choise = int(input('\tEscolha a Opção -> '))
     
-    choise = input('Escolha a Opção: ')
-    
-    if choise == 1:
-        print('')
-    '''elif choise == 2:
-    elif choise == 3:
-    elif choise == 4:
-    else:'''
+        if choise == 0:
+            os.system('cls')
+            print('\n-------------------------------OPÇÕES-------------------------------\n')
+            options_screen(graph)
+        elif choise == 1:
+            print('')
+        elif choise == 2:
+            print('')
+        else:
+            os.system('cls')
+            print('\n------------------------------PERCURSOS-----------------------------\n')
+            print('\t--> Opção Inválida. Escolha Novamente!')
+            print('\n--------------------------------------------------------------------\n')
+            route_screen(graph)
+            
+    except:
+        os.system('cls')
+        print('\n------------------------------PERCURSOS-----------------------------\n')
+        print('\t--> Opção Inválida. Escolha Novamente!')
+        print('\n--------------------------------------------------------------------\n')
+        route_screen(graph)
+
 
 def shortest_path_screen(graph):
-    print('Tela Anterior (0)')
-    print('Caminhos Mínimos (1)')
-    print('Custos Mínimos (2)')
-    print('Caminhos Mínimos Entre um Vértice e Todos os Outros (3)')
+    print('\tTela Anterior (0)')
+    print('\tCaminhos Mínimos (1)')
+    print('\tCustos Mínimos (2)')
+    print('\tCaminhos Mínimos Entre um Vértice e Todos os Outros (3)\n')
     
-    choise = input('Escolha a Opção: ')
+    try:
+        choise = int(input('\tEscolha a Opção -> '))
     
-    if choise == 1:
-        print('')
-    '''elif choise == 2:
-    elif choise == 3:
-    elif choise == 4:
-    else:'''
+        if choise == 0:
+            os.system('cls')
+            print('\n-------------------------------OPÇÕES-------------------------------\n')
+            options_screen(graph)
+        elif choise == 1:
+            print('')
+        elif choise == 2:
+            print('')
+        elif choise == 3:
+            print('')
+        else:
+            os.system('cls')
+            print('\n-------------------------CAMINNHOS  MÍNIMOS-------------------------\n')
+            print('\t--> Opção Inválida. Escolha Novamente!')
+            print('\n--------------------------------------------------------------------\n')
+            shortest_path_screen(graph)
+            
+    except:
+        os.system('cls')
+        print('\n-------------------------CAMINNHOS  MÍNIMOS-------------------------\n')
+        print('\t--> Opção Inválida. Escolha Novamente!')
+        print('\n--------------------------------------------------------------------\n')
+        shortest_path_screen(graph)
+
 
 def menu():
     works = True
-    
+    print('\n------------------------IMPLEMENTAÇÃO GRAFOS------------------------\n')
     while works:
         works = home_screen()
 
