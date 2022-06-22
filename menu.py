@@ -1,5 +1,5 @@
 import os
-from tokenize import Name
+from exceptions import *
 from graph import Graph
 from functions import *
 
@@ -66,12 +66,9 @@ def home_screen():
             dont_close_program = False
             
         else:
-            os.system('cls')
-            print('\n------------------------IMPLEMENTAÇÃO GRAFOS------------------------\n')
-            print('\t--> Opção Inválida. Escolha Novamente!')
-            print('\n--------------------------------------------------------------------\n')
+            raise ExceptionInvalidOperation
             
-    except:
+    except ExceptionInvalidOperation:
         os.system('cls')
         print('\n------------------------IMPLEMENTAÇÃO GRAFOS------------------------\n')
         print('\t--> Opção Inválida. Escolha Novamente!')
@@ -110,18 +107,17 @@ def options_screen(graph):
             shortest_path_screen(graph)
     
         else:
-            os.system('cls')
-            print('\n-------------------------------OPÇÕES-------------------------------\n')
-            print('\t--> Opção Inválida. Escolha Novamente!')
-            print('\n--------------------------------------------------------------------\n')
-            options_screen(graph)
+            raise ExceptionInvalidOperation
             
-    except:
+    except ExceptionInvalidOperation:
         os.system('cls')
         print('\n-------------------------------OPÇÕES-------------------------------\n')
         print('\t--> Opção Inválida. Escolha Novamente!')
         print('\n--------------------------------------------------------------------\n')
         options_screen(graph)
+    except NameError:
+        print(NameError)
+    
     
 def basic_operations_screen(graph):
     print('\tTela Anterior (0)')
@@ -147,39 +143,79 @@ def basic_operations_screen(graph):
             os.system('cls')
             print('\n-------------------------------OPÇÕES-------------------------------\n')
             options_screen(graph)
+            
         elif choise == 1:
-            print('')
+            vi = input('\tDigite o vertice vi -> ')
+            vj = input('\tDigite o vertice vj -> ')
+            w = input('\tDigite o peso w -> ')
+            os.system('cls')
+            print('\n-------------------------------OPÇÕES-------------------------------\n')
+            
+            added_edge = graph.add_edge(vi, vj, w)
+            if added_edge:
+                save_graph(graph.name, graph.n, graph.m, graph.edges)
+                basic_operations_screen(graph)
+            else:
+                raise ExceptionCouldNotAddEdge
+            
+            
         elif choise == 3:
             print('')
+            
         elif choise == 4:
             print('')
+            
         elif choise == 5:
             print('')
+            
         elif choise == 6:
             print('')
+            
         elif choise == 7:
             print('')
+            
         elif choise == 8:
             print('')
+            
         elif choise == 9:
             print('')
+            
         elif choise == 10:
             print('')
+            
         elif choise == 11:
             print('')
+            
         elif choise == 12:
             print('')
+            
         elif choise == 13:
             print('')
+            
         elif choise == 14:
             print('')
-        else:
-            os.system('cls')
-            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
-            print('--> Opção Inválida. Escolha Novamente!')
-            print('\n--------------------------------------------------------------------\n')
-            basic_operations_screen(graph)
             
+        else:
+            raise ExceptionInvalidOperation
+        
+    except ExceptionCouldNotAddEdge:
+        os.system('cls')
+        print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+        print('\t--> Não foi possível adicionar aresta!')
+        print('\n--------------------------------------------------------------------\n')
+        basic_operations_screen(graph)
+    except ExceptionVertexDoesNotExist:
+        os.system('cls')
+        print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+        print('\t--> Vértice Não Existe!')
+        print('\n--------------------------------------------------------------------\n')
+        basic_operations_screen(graph)
+    except ExceptionInvalidOperation:
+        os.system('cls')
+        print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+        print('\t--> Opção Inválida. Escolha Novamente!')
+        print('\n--------------------------------------------------------------------\n')
+        basic_operations_screen(graph)
     except:
         os.system('cls')
         print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
@@ -205,13 +241,9 @@ def route_screen(graph):
         elif choise == 2:
             print('')
         else:
-            os.system('cls')
-            print('\n------------------------------PERCURSOS-----------------------------\n')
-            print('\t--> Opção Inválida. Escolha Novamente!')
-            print('\n--------------------------------------------------------------------\n')
-            route_screen(graph)
+            raise ExceptionInvalidOperation
             
-    except:
+    except ExceptionInvalidOperation:
         os.system('cls')
         print('\n------------------------------PERCURSOS-----------------------------\n')
         print('\t--> Opção Inválida. Escolha Novamente!')
@@ -239,13 +271,9 @@ def shortest_path_screen(graph):
         elif choise == 3:
             print('')
         else:
-            os.system('cls')
-            print('\n-------------------------CAMINNHOS  MÍNIMOS-------------------------\n')
-            print('\t--> Opção Inválida. Escolha Novamente!')
-            print('\n--------------------------------------------------------------------\n')
-            shortest_path_screen(graph)
+            raise ExceptionInvalidOperation
             
-    except:
+    except ExceptionInvalidOperation:
         os.system('cls')
         print('\n-------------------------CAMINNHOS  MÍNIMOS-------------------------\n')
         print('\t--> Opção Inválida. Escolha Novamente!')
