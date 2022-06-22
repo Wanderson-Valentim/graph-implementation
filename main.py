@@ -11,3 +11,4 @@ g1 = Graph(name, n, m, edges)
 
 print(g1.adjacency_list)
 print(g1.adjacency_matrix)
+

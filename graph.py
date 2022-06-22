@@ -3,6 +3,7 @@ class Graph:
         self.name = name
         self.n = n
         self.m = m
+        self.edges = edges
         self.adjacency_list = self.generate_adjacency_list(edges, n, m)
         self.adjacency_matrix = self.generate_adjacency_matrix(edges, n, m)
     
