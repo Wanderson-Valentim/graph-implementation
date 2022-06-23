@@ -21,14 +21,6 @@ def read_file(file_name):
     
     return data
 
-#Questão 3 - Item (a)
-def newGraph(name):
-    graph = Graph(name)
-    return graph
-
-#Questão 3 - Item (c)
-
-
 #Salvamento de Grafos em JSON
 def get_saved_graph():
     with open('./settings/saved_graph.json') as my_json:

@@ -41,20 +41,13 @@ class Graph:
         return adjacency_matrix
     
     def has_vertex(self, vertex):
-        if vertex in self.adjacency_list.keys():
-            return True
-        
-        return False
+        return vertex in self.adjacency_list.keys()
 
     def has_edge(self, vi, vj, w):
         has_vi = self.has_vertex(vi)
-        has_vj = self.has_vertex(vj)
-        has_vi_vj = False       
+        has_vj = self.has_vertex(vj)     
         
-        if not has_vi:
-            raise ExceptionVertexDoesNotExist
-        
-        elif not has_vj:
+        if not has_vi or not has_vj:
             raise ExceptionVertexDoesNotExist
         
         else:
@@ -64,9 +57,9 @@ class Graph:
                 w_is_equal = w == self.adjacency_list[vi][vj]
                 
                 if w_is_equal:
-                    has_vi_vj = True
+                    return True
         
-        return has_vi_vj
+        return False
     
     def add_edge(self, vi, vj, w):
         has_vi = self.has_vertex(vi)
@@ -112,6 +105,8 @@ class Graph:
             i, j = int(vi[1]) - 1, int(vj[1]) - 1
             self.adjacency_matrix[i][j] = 0
             
+            self.m -= 1
+            
             removed_vi_vj = True
         
         return removed_vi_vj
@@ -120,10 +115,7 @@ class Graph:
         has_vi = self.has_vertex(vi)
         has_vj = self.has_vertex(vj)
         
-        if not has_vi:
-            raise ExceptionVertexDoesNotExist
-        
-        elif not has_vj:
+        if not has_vi or has_vj:
             raise ExceptionVertexDoesNotExist
         
         is_adjacent = vj in self.adjacency_list[vi].keys()
