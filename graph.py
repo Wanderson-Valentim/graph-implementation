@@ -138,22 +138,36 @@ class Graph:
             
         return has_been_changed
     
-    #Questão 3 - item j. Fiz de uma forma diferente do q pede a questão, ajeitar depois.
-    '''def regain_edge_weight(self, vi, vj):
-        has_vi = self.has_vertex(vi)
-        has_vj = self.has_vertex(vj)
-        
-        if not has_vi:
+    def depth_first_search(self, vertex):
+        has_vertex = self.has_vertex(vertex)
+
+        if not has_vertex:
             raise ExceptionVertexDoesNotExist
         
-        elif not has_vj:
-            raise ExceptionVertexDoesNotExist
+        stack = []
+        search_tree = []
+        mark = {}
         
-        is_adjacent = self.check_if_is_adjacent(vi, vj)
+        for i in range(self.n):
+            mark[f'v{i+1}'] = {}
+            mark[f'v{i+1}']['color'] = 'white'
+            search_tree.append(f'v{i+1}')
+            
+        mark[vertex]['color'] = 'gray'
         
-        if is_adjacent:
-            weight = self.adjacency_list[vi][vj]
-            return  weight
+        self.visit(vertex, search_tree, mark, stack)
         
-        else:
-            raise ExceptionEdgeDoesNotExist'''
+        return search_tree
+
+    def visit(self, vertex, search_tree, mark, stack):
+        stack.insert(0, vertex)
+        for neighbour in self.adjacency_list[vertex]:
+            if mark[neighbour]['color'] == 'white':
+                index = int(neighbour[1]) - 1
+                search_tree[index] = vertex
+                
+                mark[neighbour]['color'] = 'gray'
+                self.visit(neighbour, search_tree, mark, stack)
+        
+        stack.pop(0)
+        mark[vertex]['color'] = 'black'

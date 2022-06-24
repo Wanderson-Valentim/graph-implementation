@@ -77,14 +77,14 @@ def home_screen():
             
         else:
             raise ExceptionInvalidOperation
-            
+        
     except ExceptionInvalidOperation:
         os.system('cls')
         print_header('Opção Inválida. Escolha Novamente!')
     except:
         os.system('cls')
         print_header('Opção Inválida. Escolha Novamente!')
-    
+        
     return dont_close_program
     
 
@@ -197,14 +197,6 @@ def basic_operations_screen(graph):
                 raise ExceptionEdgeDoesNotExist
             
         elif choise == 4:
-            '''vi = input('\tDigite o vertice vi -> ')
-            vj = input('\tDigite o vertice vj -> ')
-            os.system('cls')
-            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
-            weight = graph.regain_edge_weight(vi, vj)
-            print(f'\t--> O Peso da Aresta {vi}, {vj} é {weight}')
-            print('\n--------------------------------------------------------------------\n')
-            basic_operations_screen(graph)'''
             print('')
 
         elif choise == 5:
@@ -329,7 +321,11 @@ def route_screen(graph):
         elif choise == 1:
             print('')
         elif choise == 2:
-            print('')
+            vi = input('\tDigite o vertice vi -> ')
+            os.system('cls')
+            search_tree = graph.depth_first_search(vi)
+            print_header(search_tree, 'routes')
+            route_screen(graph)
         else:
             raise ExceptionInvalidOperation
             
