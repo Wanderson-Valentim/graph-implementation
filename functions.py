@@ -1,6 +1,12 @@
 import json
 from graph import Graph
 
+def print_adjacency_list(adjacency_list, vi):
+    print(f'\t[{vi}] --> ', end='')
+    for vertex in adjacency_list[vi]:
+        print(f'[{vertex}] --> ', end='')
+    print('λ')
+
 #Questão 1
 def read_file(file_name):
     data = {
@@ -58,9 +64,3 @@ def remove_saved_graph():
     data['graph']['edges'] = []
     
     write_to_file_json(data)
-    
-def print_adjacency_list(adjacency_list, vi):
-    print(f'\t[{vi}] --> ', end='')
-    for vertex in adjacency_list[vi]:
-        print(f'[{vertex}] --> ', end='')
-    print('λ')

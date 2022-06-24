@@ -17,6 +17,7 @@ def print_header(text, option = None):
     print(f'\t--> {text}')
     print('\n--------------------------------------------------------------------\n')
 
+
 def home_screen():
     dont_close_program = True
     print('\tGrafo a Partir de Um Arquivo (1)')
@@ -130,20 +131,21 @@ def options_screen(graph):
     
 def basic_operations_screen(graph):
     print('\tTela Anterior (0)')
-    print('\tAdicionar Aresta (1)') #OK
-    print('\tRemover Aresta (2)') #OK
-    print('\tMudar Peso (3)') #Ajustar Excecoes
-    print('\tRecupera Peso (4)')
-    print('\tIncidência (5)')
-    print('\tVerificar se Vértice Pertence ao Grafo (6)') #OK
-    print('\tVerificar se Aresta Pertence ao Grafo (7)') #OK
-    print('\tImprime Matriz de Adjacências (8)')
-    print('\tImprime Lista de Adjacências (9)') #Ok
-    print('\tImprime Lista de Adjacências de um Vértice (10)') #OK
-    print('\tVerifica se é Vizinho (11)') #OK
-    print('\tVerifica se Gafro é Simples (12)')
-    print('\tVerifica se Gafro é Conexo (13)')
-    print('\tVerifica se Gafro é Bipartido (14)\n')
+    print('\tAdicionar Vértices (1)') #OK
+    print('\tAdicionar Aresta (2)') #OK
+    print('\tRemover Aresta (3)') #OK
+    print('\tMudar Peso (4)') #Ajustar Excecoes
+    print('\tRecupera Peso (5)')
+    print('\tIncidência (6)')
+    print('\tVerificar se Vértice Pertence ao Grafo (7)') #OK
+    print('\tVerificar se Aresta Pertence ao Grafo (8)') #OK
+    print('\tImprime Matriz de Adjacências (9)')
+    print('\tImprime Lista de Adjacências (10)') #Ok
+    print('\tImprime Lista de Adjacências de um Vértice (11)') #OK
+    print('\tVerifica se é Vizinho (12)') #OK
+    print('\tVerifica se Gafro é Simples (13)')
+    print('\tVerifica se Gafro é Conexo (14)')
+    print('\tVerifica se Gafro é Bipartido (15)\n')
     
     try:
         choise = int(input('\tEscolha a Opção -> '))
@@ -154,6 +156,14 @@ def basic_operations_screen(graph):
             options_screen(graph)
             
         elif choise == 1:
+            num_vertices = int(input('\tDigite a quantidade de vértices -> '))
+            graph.add_vertices(num_vertices)
+            save_graph(graph.name, graph.n, graph.m, graph.edges)
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+            basic_operations_screen(graph)
+            
+        elif choise == 2:
             vi = input('\tDigite o vertice vi -> ')
             vj = input('\tDigite o vertice vj -> ')
             w = input('\tDigite o peso w -> ')
@@ -167,13 +177,12 @@ def basic_operations_screen(graph):
             else:
                 raise ExceptionCouldNotAddEdge
             
-        elif choise == 2:
+        elif choise == 3:
             vi = input('\tDigite o vertice vi -> ')
             vj = input('\tDigite o vertice vj -> ')
             w = input('\tDigite o peso w -> ')
             os.system('cls')
             print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
-            
             remove_edge = graph.remove_edge(vi, vj, w)
             if remove_edge:
                 save_graph(graph.name, graph.n, graph.m, graph.edges)
@@ -181,7 +190,7 @@ def basic_operations_screen(graph):
             else:
                 raise ExceptionUnableToRemoveEdge
         
-        elif choise == 3:
+        elif choise == 4:
             vi = input('\tDigite o vertice vi -> ')
             vj = input('\tDigite o vertice vj -> ')
             old_w = input('\tDigite o atual peso w -> ')
@@ -196,13 +205,13 @@ def basic_operations_screen(graph):
             else:
                 raise ExceptionEdgeDoesNotExist
             
-        elif choise == 4:
-            print('')
-
         elif choise == 5:
             print('')
-            
+
         elif choise == 6:
+            print('')
+            
+        elif choise == 7:
             vi = input('\tDigite o vertice vi -> ')
             os.system('cls')
             
@@ -216,7 +225,7 @@ def basic_operations_screen(graph):
 
             basic_operations_screen(graph)
             
-        elif choise == 7:
+        elif choise == 8:
             vi = input('\tDigite o vertice vi -> ')
             vj = input('\tDigite o vertice vj -> ')
             w = input('\tDigite o peso w -> ')
@@ -232,10 +241,10 @@ def basic_operations_screen(graph):
             
             basic_operations_screen(graph)
             
-        elif choise == 8:
+        elif choise == 9:
             print('')
             
-        elif choise == 9:
+        elif choise == 10:
             os.system('cls')
             print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
             print(f'\t--> Lista de Adjacências do Grafo {graph.name}')
@@ -244,7 +253,7 @@ def basic_operations_screen(graph):
             print('\n--------------------------------------------------------------------\n')
             basic_operations_screen(graph)
             
-        elif choise == 10:
+        elif choise == 11:
             vertex = input('\tDigite o vertice vi -> ')
             os.system('cls')
             print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
@@ -257,7 +266,7 @@ def basic_operations_screen(graph):
             print('\n--------------------------------------------------------------------\n')
             basic_operations_screen(graph)
             
-        elif choise == 11:
+        elif choise == 12:
             vi = input('\tDigite o vertice vi -> ')
             vj = input('\tDigite o vertice vj -> ')
             os.system('cls')
@@ -272,13 +281,13 @@ def basic_operations_screen(graph):
             
             basic_operations_screen(graph)
             
-        elif choise == 12:
-            print('')
-            
         elif choise == 13:
             print('')
             
         elif choise == 14:
+            print('')
+            
+        elif choise == 15:
             print('')
             
         else:
@@ -308,8 +317,8 @@ def basic_operations_screen(graph):
 
 def route_screen(graph):
     print('\tTela Anterior (0)')
-    print('\tExcutar Busca em Largura (1)')
-    print('\tExcutar Busca em Profundidade (2)\n')
+    print('\tBusca em Largura (1)')
+    print('\tBusca em Profundidade (2)\n')
 
     try:
         choise = int(input('\tEscolha a Opção -> '))

@@ -60,20 +60,24 @@ class Graph:
                     return True
         
         return False
+   
+    def add_vertices(self, num_vertices):
+        if num_vertices < 1:
+            raise ExceptionInvalidOperation
+        self.n += num_vertices
+        self.adjacency_list = self.generate_adjacency_list(self.edges, self.n, self.m)
+        self.adjacency_matrix = self.generate_adjacency_matrix(self.edges, self.n, self.m)
     
     def add_edge(self, vi, vj, w):
         has_vi = self.has_vertex(vi)
         has_vj = self.has_vertex(vj)
         has_vj_in_vi = self.check_if_is_adjacent(vi, vj)
         added_vi_vj = False
-        
-        if not has_vi:
+
+        if not has_vi or not has_vj:
             raise ExceptionVertexDoesNotExist
         
-        elif not has_vj:
-            raise ExceptionVertexDoesNotExist
-        
-        elif has_vj_in_vi == False:
+        if not has_vj_in_vi:
             #Adiciona a aresta em edges
             self.edges.append([vi, vj, w])
             
@@ -83,6 +87,8 @@ class Graph:
             #Adiciona a aresta na matriz de adjacencias
             i, j = int(vi[1]) - 1, int(vj[1]) - 1
             self.adjacency_matrix[i][j] = 1
+            
+            self.m += 1
             
             added_vi_vj = True
         
@@ -114,8 +120,8 @@ class Graph:
     def check_if_is_adjacent(self, vi, vj):
         has_vi = self.has_vertex(vi)
         has_vj = self.has_vertex(vj)
-        
-        if not has_vi or has_vj:
+
+        if not has_vi or not has_vj:
             raise ExceptionVertexDoesNotExist
         
         is_adjacent = vj in self.adjacency_list[vi].keys()
@@ -163,7 +169,8 @@ class Graph:
         stack.insert(0, vertex)
         for neighbour in self.adjacency_list[vertex]:
             if mark[neighbour]['color'] == 'white':
-                index = int(neighbour[1]) - 1
+                
+                index = int(neighbour.replace('v','')) - 1 if len(neighbour) > 2 else int(neighbour[1]) - 1
                 search_tree[index] = vertex
                 
                 mark[neighbour]['color'] = 'gray'
