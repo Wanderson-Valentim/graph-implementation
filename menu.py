@@ -1,0 +1,383 @@
+import os
+from exceptions import *
+from graph import Graph
+from functions import *
+
+def print_header(text, option = None):
+    if option == 'options':
+        print('\n-------------------------------OPÇÕES-------------------------------\n')
+    elif option == 'basic_operations':
+        print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+    elif option == 'routes':
+        print('\n------------------------------PERCURSOS-----------------------------\n')
+    elif option == 'shortest_path':
+        print('\n-------------------------CAMINNHOS  MÍNIMOS-------------------------\n')
+    else:
+        print('\n------------------------IMPLEMENTAÇÃO GRAFOS------------------------\n')
+    print(f'\t--> {text}')
+    print('\n--------------------------------------------------------------------\n')
+
+
+def home_screen():
+    dont_close_program = True
+    print('\tGrafo a Partir de Um Arquivo (1)')
+    print('\tNovo Grafo (2)')
+    print('\tGrafo Salvo (3)')
+    print('\tRemove Grafo (4)')
+    print('\tFechar (5)\n')
+    
+    try:
+        choise = int(input('\tEscolha a Opção -> '))
+        
+        if choise == 1:
+            data = read_file("graph")
+            name = data['information'][0]
+            n = int(data['information'][1])
+            m = int(data['information'][2])
+            edges = data['edges']
+            
+            save_graph(name, n, m, edges)
+            
+            graph = Graph(name, n, m, edges)
+            os.system('cls')
+            print('\n-------------------------------OPÇÕES-------------------------------\n')
+            options_screen(graph)
+            
+        elif choise == 2:
+            name = input('\tEscolha o nome do Grafo: ')
+            graph = Graph(name)
+            save_graph(name)
+            os.system('cls')
+            print('\n-------------------------------OPÇÕES-------------------------------\n')
+            options_screen(graph)
+        
+        elif choise == 3:
+            saved = get_saved_graph()
+            was_saved = saved['has_saved_graph']
+            
+            if was_saved:
+                name = saved['graph']['name']
+                n = int(saved['graph']['n'])
+                m = int(saved['graph']['m'])
+                edges = saved['graph']['edges']
+                graph = Graph(name, n, m, edges)
+                os.system('cls')
+                print('\n-------------------------------OPÇÕES-------------------------------\n')
+                options_screen(graph)
+            else:
+                os.system('cls')
+                print_header('Não Possui Grafo Salvo!')
+            
+        elif choise == 4:
+            os.system('cls')
+            remove_saved_graph()
+            print_header('Grafo Removido!')
+            
+        elif choise == 5:
+            dont_close_program = False
+            
+        else:
+            raise ExceptionInvalidOperation
+        
+    except ExceptionInvalidOperation:
+        os.system('cls')
+        print_header('Opção Inválida. Escolha Novamente!')
+    except:
+        os.system('cls')
+        print_header('Opção Inválida. Escolha Novamente!')
+        
+    return dont_close_program
+    
+
+def options_screen(graph):
+    print('\tTela Anterior (0)')
+    print('\tOperações Básicas (1)')
+    print('\tPercursos (2)')
+    print('\tCaminhos Mínimos (3)\n')
+    
+    try:
+        choise = int(input('\tEscolha a Opção -> '))
+        
+        if choise == 0:
+            os.system('cls')
+            print('\n------------------------IMPLEMENTAÇÃO GRAFOS------------------------\n')
+            return
+            
+        elif choise == 1:
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+            basic_operations_screen(graph)
+            
+        elif choise == 2:
+            os.system('cls')
+            print('\n------------------------------PERCURSOS-----------------------------\n')
+            route_screen(graph)
+            
+        elif choise == 3:
+            os.system('cls')
+            print('\n-------------------------CAMINNHOS  MÍNIMOS-------------------------\n')
+            shortest_path_screen(graph)
+    
+        else:
+            raise ExceptionInvalidOperation
+            
+    except ExceptionInvalidOperation:
+        os.system('cls')
+        print_header('Opção Inválida. Escolha Novamente!', 'options')
+        options_screen(graph)
+    except NameError:
+        print(NameError)
+    
+    
+def basic_operations_screen(graph):
+    print('\tTela Anterior (0)')
+    print('\tAdicionar Vértices (1)') #OK
+    print('\tAdicionar Aresta (2)') #OK
+    print('\tRemover Aresta (3)') #OK
+    print('\tMudar Peso (4)') #Ajustar Excecoes
+    print('\tRecupera Peso (5)')
+    print('\tIncidência (6)')
+    print('\tVerificar se Vértice Pertence ao Grafo (7)') #OK
+    print('\tVerificar se Aresta Pertence ao Grafo (8)') #OK
+    print('\tImprime Matriz de Adjacências (9)')
+    print('\tImprime Lista de Adjacências (10)') #Ok
+    print('\tImprime Lista de Adjacências de um Vértice (11)') #OK
+    print('\tVerifica se é Vizinho (12)') #OK
+    print('\tVerifica se Gafro é Simples (13)')
+    print('\tVerifica se Gafro é Conexo (14)')
+    print('\tVerifica se Gafro é Bipartido (15)\n')
+    
+    try:
+        choise = int(input('\tEscolha a Opção -> '))
+    
+        if choise == 0:
+            os.system('cls')
+            print('\n-------------------------------OPÇÕES-------------------------------\n')
+            options_screen(graph)
+            
+        elif choise == 1:
+            num_vertices = int(input('\tDigite a quantidade de vértices -> '))
+            graph.add_vertices(num_vertices)
+            save_graph(graph.name, graph.n, graph.m, graph.edges)
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+            basic_operations_screen(graph)
+            
+        elif choise == 2:
+            vi = input('\tDigite o vertice vi -> ')
+            vj = input('\tDigite o vertice vj -> ')
+            w = input('\tDigite o peso w -> ')
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+            
+            added_edge = graph.add_edge(vi, vj, w)
+            if added_edge:
+                save_graph(graph.name, graph.n, graph.m, graph.edges)
+                basic_operations_screen(graph)
+            else:
+                raise ExceptionCouldNotAddEdge
+            
+        elif choise == 3:
+            vi = input('\tDigite o vertice vi -> ')
+            vj = input('\tDigite o vertice vj -> ')
+            w = input('\tDigite o peso w -> ')
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+            remove_edge = graph.remove_edge(vi, vj, w)
+            if remove_edge:
+                save_graph(graph.name, graph.n, graph.m, graph.edges)
+                basic_operations_screen(graph)
+            else:
+                raise ExceptionUnableToRemoveEdge
+        
+        elif choise == 4:
+            vi = input('\tDigite o vertice vi -> ')
+            vj = input('\tDigite o vertice vj -> ')
+            old_w = input('\tDigite o atual peso w -> ')
+            new_w = input('\tDigite o novo peso w -> ')
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+            has_been_changed = graph.change_edge_weight(vi, vj, old_w, new_w)
+            
+            if has_been_changed:
+                save_graph(graph.name, graph.n, graph.m, graph.edges)
+                basic_operations_screen(graph)
+            else:
+                raise ExceptionEdgeDoesNotExist
+            
+        elif choise == 5:
+            print('')
+
+        elif choise == 6:
+            print('')
+            
+        elif choise == 7:
+            vi = input('\tDigite o vertice vi -> ')
+            os.system('cls')
+            
+            is_adjacent = graph.has_vertex(vi)
+            if is_adjacent:
+                text = f'\t--> {vi} Pertence ao Grafo.'
+            else:
+                text = f'\t--> {vi} Não Pertence ao Grafo.'
+                
+            print_header(text, 'basic_operations')
+
+            basic_operations_screen(graph)
+            
+        elif choise == 8:
+            vi = input('\tDigite o vertice vi -> ')
+            vj = input('\tDigite o vertice vj -> ')
+            w = input('\tDigite o peso w -> ')
+            os.system('cls')
+
+            has_edge = graph.has_edge(vi, vj, w)
+            if has_edge:
+                text = f'\t--> A Aresta {vi}, {vj} Com Peso {w} Pertencem ao Grafo.'
+            else:
+                text = f'\t--> A Aresta {vi}, {vj} Com Peso {w} Não Pertencem ao Grafo.'
+            
+            print_header(text, 'basic_operations')
+            
+            basic_operations_screen(graph)
+            
+        elif choise == 9:
+            print('')
+            
+        elif choise == 10:
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+            print(f'\t--> Lista de Adjacências do Grafo {graph.name}')
+            for vertex in graph.adjacency_list:         
+                print_adjacency_list(graph.adjacency_list, vertex)
+            print('\n--------------------------------------------------------------------\n')
+            basic_operations_screen(graph)
+            
+        elif choise == 11:
+            vertex = input('\tDigite o vertice vi -> ')
+            os.system('cls')
+            print('\n-------------------------OPERAÇÕES  BÁSICAS-------------------------\n')
+            print(f'\t--> Lista de Adjacências do Vértice {vertex}')
+            has_vertex = graph.has_vertex(vertex)
+            if has_vertex:
+                print_adjacency_list(graph.adjacency_list, vertex)
+            else:
+                raise ExceptionVertexDoesNotExist
+            print('\n--------------------------------------------------------------------\n')
+            basic_operations_screen(graph)
+            
+        elif choise == 12:
+            vi = input('\tDigite o vertice vi -> ')
+            vj = input('\tDigite o vertice vj -> ')
+            os.system('cls')
+            
+            is_adjacent = graph.check_if_is_adjacent(vi, vj)
+            if is_adjacent:
+                text = f'\t--> {vi} e {vj} São Adjacentes.'
+            else:
+                text = f'\t--> {vi} e {vj} Não São Adjacentes.'
+            
+            print_header(text, 'basic_operations')
+            
+            basic_operations_screen(graph)
+            
+        elif choise == 13:
+            print('')
+            
+        elif choise == 14:
+            print('')
+            
+        elif choise == 15:
+            print('')
+            
+        else:
+            raise ExceptionInvalidOperation
+        
+    except ExceptionCouldNotAddEdge:
+        os.system('cls')
+        print_header('Não Foi Possível Adicionar Aresta!', 'basic_operations')
+        basic_operations_screen(graph)
+    except ExceptionVertexDoesNotExist:
+        os.system('cls')
+        print_header('Vértice Não Existe!', 'basic_operations')
+        basic_operations_screen(graph)
+    except ExceptionEdgeDoesNotExist:
+        os.system('cls')
+        print_header('Aresta Não Existe!', 'basic_operations')
+        basic_operations_screen(graph)
+    except ExceptionInvalidOperation:
+        os.system('cls')
+        print_header('Opção Inválida. Escolha Novamente!', 'basic_operations')
+        basic_operations_screen(graph)
+    except:
+        os.system('cls')
+        print_header('Opção Inválida. Escolha Novamente!', 'basic_operations')
+        basic_operations_screen(graph)
+
+
+def route_screen(graph):
+    print('\tTela Anterior (0)')
+    print('\tBusca em Largura (1)')
+    print('\tBusca em Profundidade (2)\n')
+
+    try:
+        choise = int(input('\tEscolha a Opção -> '))
+    
+        if choise == 0:
+            os.system('cls')
+            print('\n-------------------------------OPÇÕES-------------------------------\n')
+            options_screen(graph)
+        elif choise == 1:
+            print('')
+        elif choise == 2:
+            vi = input('\tDigite o vertice vi -> ')
+            os.system('cls')
+            search_tree = graph.depth_first_search(vi)
+            print_header(search_tree, 'routes')
+            route_screen(graph)
+        else:
+            raise ExceptionInvalidOperation
+            
+    except ExceptionInvalidOperation:
+        os.system('cls')
+        print_header('Opção Inválida. Escolha Novamente!', 'routes')
+        route_screen(graph)
+
+
+def shortest_path_screen(graph):
+    print('\tTela Anterior (0)')
+    print('\tCaminhos Mínimos (1)')
+    print('\tCustos Mínimos (2)')
+    print('\tCaminhos Mínimos Entre um Vértice e Todos os Outros (3)\n')
+    
+    try:
+        choise = int(input('\tEscolha a Opção -> '))
+    
+        if choise == 0:
+            os.system('cls')
+            print('\n-------------------------------OPÇÕES-------------------------------\n')
+            options_screen(graph)
+        elif choise == 1:
+            print('')
+        elif choise == 2:
+            print('')
+        elif choise == 3:
+            print('')
+        else:
+            raise ExceptionInvalidOperation
+            
+    except ExceptionInvalidOperation:
+        os.system('cls')
+        print_header('Opção Inválida. Escolha Novamente!', 'shortest_path')
+        shortest_path_screen(graph)
+
+
+def menu():
+    works = True
+    print('\n------------------------IMPLEMENTAÇÃO GRAFOS------------------------\n')
+    while works:
+        works = home_screen()
+
+
+
+menu()
