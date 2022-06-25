@@ -12,3 +12,6 @@ class ExceptionInvalidOperation(Exception):
 
 class ExceptionUnableToRemoveEdge(Exception):
     pass
+
+class ExceptionDoesNotHaveAPathFromViToVj(Exception):
+    pass
