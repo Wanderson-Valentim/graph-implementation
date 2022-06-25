@@ -139,7 +139,6 @@ class UserUI:
         except ExceptionInvalidOperation:
             self.__print_header('Opção Inválida. Escolha Novamente!', 'options')
             self.__options_screen(graph)
-            print(not(option in range(0, 4)))
         except NameError:
             print(NameError)
 
@@ -368,7 +367,7 @@ class UserUI:
             self.__basic_operations_screen(graph)
 
 
-    def __route_screen(self, graph):
+    def __route_screen(self, graph: Graph):
         print('\tTela Anterior (0)')
         print('\tBusca em Largura (1)')
         print('\tBusca em Profundidade (2)\n')
@@ -380,7 +379,10 @@ class UserUI:
                 self.__print_header('options')
                 self.__options_screen(graph)
             elif choise == 1:
-                print('')
+                vi = input('\tDigite o vertice vi -> ')
+                search_tree = graph.breadth_first_search(vi)
+                self.__print_header(search_tree, 'routes')
+                self.__route_screen(graph)
             elif choise == 2:
                 vi = input('\tDigite o vertice vi -> ')
                 search_tree = graph.depth_first_search(vi)
@@ -390,7 +392,6 @@ class UserUI:
                 raise ExceptionInvalidOperation
                 
         except ExceptionInvalidOperation:
-            os.system('cls')
             self.__print_header('Opção Inválida. Escolha Novamente!', 'routes')
             self.__route_screen(graph)
 
@@ -417,7 +418,6 @@ class UserUI:
                 raise ExceptionInvalidOperation
                 
         except ExceptionInvalidOperation:
-            os.system('cls')
             self.__print_header('Opção Inválida. Escolha Novamente!', 'shortest_path')
             self.__shortest_path_screen(graph)
 
