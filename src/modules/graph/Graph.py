@@ -1,8 +1,8 @@
 import math
+import queue
 from ..exceptions.exceptions import *
-
 class Graph:
-    def __init__(self, name, n = 1, m = 0, edges = []):
+    def __init__(self, name: str, n: int = 1, m: int = 0, edges: list = []):
         self.name = name
         self.n = n
         self.m = m
@@ -10,7 +10,8 @@ class Graph:
         self.adjacency_list = self.generate_adjacency_list(edges, n, m)
         self.generate_adjacency_matrix(edges, n, m)
     
-    def createNodes(self, num_vertices):
+    def createNodes(self, num_vertices: int):
+        """Cria os nós de um grafo para um dado número de vértices(num_vertices)"""
         graph = {}
         
         for num in range(num_vertices):
@@ -18,7 +19,8 @@ class Graph:
         
         return graph
 
-    def generate_adjacency_list(self, edges, num_vertices, num_edges):
+    def generate_adjacency_list(self, edges: list, num_vertices: int, num_edges: int):
+        """Cria uma lista de adjacência com os vertices e suas respectivas arestas(edges) """
         graph = self.createNodes(num_vertices)
         
         if num_vertices > 1 and num_edges > 0:
@@ -27,7 +29,7 @@ class Graph:
         
         return graph
     
-    def generate_adjacency_matrix(self, edges, num_vertices, num_edges):
+    def generate_adjacency_matrix(self, edges: list, num_vertices: int, num_edges: int):
         adjacency_matrix = [[0 for _ in range(num_vertices)]
                             for _ in range(num_vertices)]
         
@@ -264,3 +266,30 @@ class Graph:
                 edge_weight_list.insert(0, [vj, aux_vj, weight])
         
         return edge_weight_list
+
+
+    def breadth_first_search(self, vi:str = 'v1'):
+        """Faz a busca em largura de um vertice, retornando a árvore de busca
+        até o momento que o nó foi encontrado.
+        """
+        search_tree = {}
+        vertices_queue = queue.Queue()
+        visited_vertices = {}
+
+        for v in self.adjacency_list:
+            visited_vertices[v] = False
+
+        visited_vertices['v1'] = True
+        vertices_queue.put('v1')
+
+        while vertices_queue.not_empty:
+            v = vertices_queue.get()
+            search_tree[v] = []
+            for w in self.adjacency_list[v]:
+                if not visited_vertices[w]:
+                    visited_vertices[w] = True
+                    vertices_queue.put(w)
+                    search_tree[v].append(w)
+                    if w == vi:
+                        return search_tree
+        return search_tree
