@@ -282,7 +282,7 @@ class Graph:
         visited_vertices['v1'] = True
         vertices_queue.put('v1')
 
-        while vertices_queue.not_empty:
+        while not vertices_queue.empty():
             v = vertices_queue.get()
             search_tree[v] = []
             for w in self.adjacency_list[v]:
