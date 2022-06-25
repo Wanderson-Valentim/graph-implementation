@@ -7,6 +7,10 @@ def print_adjacency_list(adjacency_list, vi):
         print(f'[{vertex}] --> ', end='')
     print('λ')
 
+def print_matrix(matrix):
+    for i in range(len(matrix)):
+        print(f'\t    {matrix[i]}')
+
 #Questão 1
 def read_file(file_name):
     data = {

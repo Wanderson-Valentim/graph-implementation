@@ -149,18 +149,21 @@ class UserUI:
         print('\tAdicionar Vértices (1)') #OK
         print('\tAdicionar Aresta (2)') #OK
         print('\tRemover Aresta (3)') #OK
-        print('\tMudar Peso (4)') #Ajustar Excecoes
-        print('\tRecupera Peso (5)')
-        print('\tIncidência (6)')
+        print('\tMudar Peso (4)') #OK
+        print('\tRecupera Peso (5)')#OK
+        print('\tIncidência (6)')#OK
         print('\tVerificar se Vértice Pertence ao Grafo (7)') #OK
         print('\tVerificar se Aresta Pertence ao Grafo (8)') #OK
-        print('\tImprime Matriz de Adjacências (9)')
-        print('\tImprime Lista de Adjacências (10)') #Ok
-        print('\tImprime Lista de Adjacências de um Vértice (11)') #OK
-        print('\tVerifica se é Vizinho (12)') #OK
-        print('\tVerifica se Gafro é Simples (13)')
-        print('\tVerifica se Gafro é Conexo (14)')
-        print('\tVerifica se Gafro é Bipartido (15)\n')
+        print('\tImprime Matriz de Pesos (9)') #Ok
+        print('\tImprime Matriz de Adjacências (10)') #OK
+        print('\tImprime Lista de Adjacências (11)') #Ok
+        print('\tImprime Lista de Adjacências de um Vértice (12)') #OK
+        print('\tVerifica se é Vizinho (13)') #OK
+        print('\tVerifica se Gafro é Simples (14)')#OK
+        print('\tVerifica se Gafro é Conexo (15)')
+        print('\tVerifica se Gafro é Bipartido (16)')
+        print('\tVerifica se Gafro é Árvore (17)')
+        print('\tComplemento do Grafro(18)\n')
 
         try:
             choise = int(input('\tEscolha a Opção -> '))
@@ -206,7 +209,7 @@ class UserUI:
                 vj = input('\tDigite o vertice vj -> ')
                 old_w = input('\tDigite o atual peso w -> ')
                 new_w = input('\tDigite o novo peso w -> ')
-                self.__print_menu_option('c')
+                self.__print_menu_option('basic_operations')
                 has_been_changed = graph.change_edge_weight(vi, vj, old_w, new_w)
                 
                 if has_been_changed:
@@ -216,10 +219,33 @@ class UserUI:
                     raise ExceptionEdgeDoesNotExist
                 
             elif choise == 5:
-                print('')
+                vi = input('\tDigite o vertice vi -> ')
+                vj = input('\tDigite o vertice vj -> ')
+                self.__print_menu_option('basic_operations')
+                print(f'\t--> Pesos das arestas entre os vértices {vi} e {vj}')
+                edge_weight_list = graph.regain_weight(vi, vj)
+                
+                for i in range(len(edge_weight_list)):
+                    print(f'\t    {edge_weight_list[i][0]} ---> {edge_weight_list[i][1]} com peso {edge_weight_list[i][2]}')
+                
+                self.__print_line()
+                
+                self.__basic_operations_screen(graph)
 
             elif choise == 6:
-                print('')
+                vertex = input('\tDigite o vertice -> ')      
+                vertices = graph.incidence(vertex)
+                
+                self.__print_menu_option('basic_operations')
+                if len(vertices) == 0:
+                    print(f'\t--> Não tem arestas incidentes a {vertex}')
+                else:
+                    print(f'\t--> Arestas incidentes a {vertex}')
+                    print_matrix(vertices)
+                
+                self.__print_line()
+                
+                self.__basic_operations_screen(graph)
                 
             elif choise == 7:
                 vi = input('\tDigite o vertice vi -> ')
@@ -227,9 +253,9 @@ class UserUI:
                 
                 is_adjacent = graph.has_vertex(vi)
                 if is_adjacent:
-                    text = f'\t--> {vi} Pertence ao Grafo.'
+                    text = f'{vi} Pertence ao Grafo.'
                 else:
-                    text = f'\t--> {vi} Não Pertence ao Grafo.'
+                    text = f'{vi} Não Pertence ao Grafo.'
                     
                 self.__print_header(text, 'basic_operations')
                 self.__basic_operations_screen(graph)
@@ -241,17 +267,30 @@ class UserUI:
 
                 has_edge = graph.has_edge(vi, vj, w)
                 if has_edge:
-                    text = f'\t--> A Aresta {vi}, {vj} Com Peso {w} Pertencem ao Grafo.'
+                    text = f'A Aresta {vi}, {vj} Com Peso {w} Pertencem ao Grafo.'
                 else:
-                    text = f'\t--> A Aresta {vi}, {vj} Com Peso {w} Não Pertencem ao Grafo.'
+                    text = f'A Aresta {vi}, {vj} Com Peso {w} Não Pertencem ao Grafo.'
                 
                 self.__print_header(text, 'basic_operations')
                 self.__basic_operations_screen(graph)
                 
             elif choise == 9:
-                print('')
+                self.__print_menu_option('basic_operations')
+                print(f'\t--> Matriz de Pesos do Grafo {graph.name}')
+                print_matrix(graph.weight_matrix)
+                self.__print_line()
                 
+                self.__basic_operations_screen(graph)
+            
             elif choise == 10:
+                self.__print_menu_option('basic_operations')
+                print(f'\t--> Matriz de Adjacências do Grafo {graph.name}')
+                print_matrix(graph.adjacency_matrix)
+                self.__print_line()
+                
+                self.__basic_operations_screen(graph)
+                
+            elif choise == 11:
                 self.__print_menu_option('basic_operations')
                 print(f'\t--> Lista de Adjacências do Grafo {graph.name}')
                 for vertex in graph.adjacency_list:         
@@ -259,7 +298,7 @@ class UserUI:
                 self.__print_line()
                 self.__basic_operations_screen(graph)
                 
-            elif choise == 11:
+            elif choise == 12:
                 vertex = input('\tDigite o vertice vi -> ')
                 self.__print_menu_option('basic_operations')
                 print(f'\t--> Lista de Adjacências do Vértice {vertex}')
@@ -272,32 +311,49 @@ class UserUI:
                 self.__print_line()
                 self.__basic_operations_screen(graph)
                 
-            elif choise == 12:
+            elif choise == 13:
                 vi = input('\tDigite o vertice vi -> ')
                 vj = input('\tDigite o vertice vj -> ')
                 os.system('cls')
                 
                 is_adjacent = graph.check_if_is_adjacent(vi, vj)
                 if is_adjacent:
-                    text = f'\t--> {vi} e {vj} São Adjacentes.'
+                    text = f'{vi} e {vj} São Adjacentes.'
                 else:
-                    text = f'\t--> {vi} e {vj} Não São Adjacentes.'
+                    text = f'{vi} e {vj} Não São Adjacentes.'
                 
                 self.__print_header(text, 'basic_operations')
                 self.__basic_operations_screen(graph)
                 
-            elif choise == 13:
-                print('')
-                
             elif choise == 14:
-                print('')
+                is_simple = graph.check_if_the_graph_is_simple()
+                if is_simple:
+                    text = f'O grafo {graph.name} é simples.'
+                else:
+                    text = f'O grafo {graph.name} não é simples.'
+
+                self.__print_header(text, 'basic_operations')
+                
+                self.__basic_operations_screen(graph)
                 
             elif choise == 15:
+                print('')
+                
+            elif choise == 16:
+                print('')
+                
+            elif choise == 17:
+                print('')
+            
+            elif choise == 18:
                 print('')
                 
             else:
                 raise ExceptionInvalidOperation
             
+        except ExceptionDoesNotHaveAPathFromViToVj:
+            self.__print_header('Não existe um caminho de vi a vj!', 'basic_operations')
+            self.__basic_operations_screen(graph)
         except ExceptionCouldNotAddEdge:
             self.__print_header('Não Foi Possível Adicionar Aresta!', 'basic_operations')
             self.__basic_operations_screen(graph)

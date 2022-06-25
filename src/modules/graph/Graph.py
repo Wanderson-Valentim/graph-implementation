@@ -1,3 +1,4 @@
+import math
 from ..exceptions.exceptions import *
 
 class Graph:
@@ -7,7 +8,7 @@ class Graph:
         self.m = m
         self.edges = edges
         self.adjacency_list = self.generate_adjacency_list(edges, n, m)
-        self.adjacency_matrix = self.generate_adjacency_matrix(edges, n, m)
+        self.generate_adjacency_matrix(edges, n, m)
     
     def createNodes(self, num_vertices):
         graph = {}
@@ -30,15 +31,20 @@ class Graph:
         adjacency_matrix = [[0 for _ in range(num_vertices)]
                             for _ in range(num_vertices)]
         
+        weight_matrix = [[math.inf for _ in range(num_vertices)]
+                            for _ in range(num_vertices)]
+        
         if num_vertices > 1 and num_edges > 0:
             for edge in edges:
                 vertex1 = edge[0]
                 vertex2 = edge[1]
-                vi = int(vertex1[1]) - 1
-                vj = int(vertex2[1]) - 1
+                vi = int(vertex1.replace('v','')) - 1 
+                vj = int(vertex2.replace('v','')) - 1
                 adjacency_matrix[vi][vj] = 1
+                weight_matrix[vi][vj] = int(edge[2])
 
-        return adjacency_matrix
+        self.weight_matrix = weight_matrix
+        self.adjacency_matrix = adjacency_matrix
     
     def has_vertex(self, vertex):
         return vertex in self.adjacency_list.keys()
@@ -66,7 +72,7 @@ class Graph:
             raise ExceptionInvalidOperation
         self.n += num_vertices
         self.adjacency_list = self.generate_adjacency_list(self.edges, self.n, self.m)
-        self.adjacency_matrix = self.generate_adjacency_matrix(self.edges, self.n, self.m)
+        self.generate_adjacency_matrix(self.edges, self.n, self.m)
     
     def add_edge(self, vi, vj, w):
         has_vi = self.has_vertex(vi)
@@ -85,8 +91,9 @@ class Graph:
             self.adjacency_list[vi][vj] = w 
             
             #Adiciona a aresta na matriz de adjacencias
-            i, j = int(vi[1]) - 1, int(vj[1]) - 1
+            i, j = int(vi.replace('v','')) - 1, int(vj.replace('v','')) - 1
             self.adjacency_matrix[i][j] = 1
+            self.weight_matrix[i][j] = w
             
             self.m += 1
             
@@ -108,8 +115,9 @@ class Graph:
             self.adjacency_list.pop(vi)
             
             #Remove a aresta da matriz de adjacencias
-            i, j = int(vi[1]) - 1, int(vj[1]) - 1
+            i, j = int(vi.replace('v','')) - 1, int(vj.replace('v','')) - 1
             self.adjacency_matrix[i][j] = 0
+            self.weight_matrix[i][j] = math.inf
             
             self.m -= 1
             
@@ -170,11 +178,89 @@ class Graph:
         for neighbour in self.adjacency_list[vertex]:
             if mark[neighbour]['color'] == 'white':
                 
-                index = int(neighbour.replace('v','')) - 1 if len(neighbour) > 2 else int(neighbour[1]) - 1
+                index = int(neighbour.replace('v','')) - 1
                 search_tree[index] = vertex
                 
                 mark[neighbour]['color'] = 'gray'
                 self.visit(neighbour, search_tree, mark, stack)
         
-        stack.pop(0)
         mark[vertex]['color'] = 'black'
+        
+    def check_if_the_graph_is_simple(self):
+        for vi in self.adjacency_list.keys():
+            for vj in self.adjacency_list[vi].keys():
+                has_vi_in_vj = vi in self.adjacency_list[vj].keys()
+                has_vj_in_vi = vj in self.adjacency_list[vi].keys()
+
+                if has_vi_in_vj and has_vj_in_vi:
+                    weight_vi_vj = self.adjacency_list[vi][vj]
+                    weight_vj_vi = self.adjacency_list[vj][vi]
+                    if  weight_vi_vj != weight_vj_vi:
+                        return False
+                else:
+                    return False
+        
+        return True
+
+    def incidence(self, vertex):
+        has_vertex = self.has_vertex(vertex)
+
+        if not has_vertex:
+            raise ExceptionVertexDoesNotExist
+        
+        is_simple = self.check_if_the_graph_is_simple()
+        
+        if is_simple:
+            vertices = self.incidence_simple_graph(vertex)
+        else:
+            vertices = self.incidence_digraph(vertex)
+            
+        return vertices
+            
+    def incidence_digraph(self, vertex):
+        vertices = []
+        
+        for vi in self.adjacency_list.keys():
+            if vi != vertex:
+                for vj in self.adjacency_list[vi].keys():
+                    if vj == vertex:
+                        vertices.append([vi, vertex])
+        
+        return vertices
+    
+    def incidence_simple_graph(self, vertex):
+        vertices = []
+        
+        for vj in self.adjacency_list[vertex].keys():
+            vertices.append([vertex, vj])
+        
+        return vertices
+    
+    def regain_weight(self, vi, vj):
+        search_tree = self.depth_first_search(vi)
+        has_vj = self.has_vertex(vj)
+
+        if not has_vj:
+            raise ExceptionVertexDoesNotExist
+        
+        index = int(vj.replace('v','')) - 1
+        if search_tree[index] == vj:
+            raise ExceptionDoesNotHaveAPathFromViToVj
+        
+        edge_weight_list = []
+        builds = True
+        
+        while builds:
+            index_vertex = int(vj.replace('v','')) - 1
+            aux_vj = vj
+            vj = search_tree[index_vertex]
+            
+            if vj == vi:
+                weight = self.adjacency_list[vj][aux_vj]
+                edge_weight_list.insert(0, [vj, aux_vj, weight])
+                builds = False
+            else:
+                weight = self.adjacency_list[vj][aux_vj]
+                edge_weight_list.insert(0, [vj, aux_vj, weight])
+        
+        return edge_weight_list
