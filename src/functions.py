@@ -1,5 +1,5 @@
 import json
-from graph import Graph
+from modules.graph.Graph import Graph
 
 def print_adjacency_list(adjacency_list, vi):
     print(f'\t[{vi}] --> ', end='')

@@ -1,4 +1,4 @@
-from exceptions import *
+from ..exceptions.exceptions import *
 
 class Graph:
     def __init__(self, name, n = 1, m = 0, edges = []):
