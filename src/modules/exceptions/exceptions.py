@@ -15,3 +15,6 @@ class ExceptionUnableToRemoveEdge(Exception):
 
 class ExceptionDoesNotHaveAPathFromViToVj(Exception):
     pass
+
+class ExceptionContainsNegativeCycle(Exception):
+    pass
