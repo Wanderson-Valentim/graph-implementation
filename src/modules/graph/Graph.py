@@ -1,6 +1,7 @@
 import math
 import queue
 from ..exceptions.exceptions import *
+
 class Graph:
     def __init__(self, name: str, n: int = 1, m: int = 0, edges: list = []):
         self.name = name
@@ -234,7 +235,7 @@ class Graph:
         vertices = []
         
         for vj in self.adjacency_list[vertex].keys():
-            vertices.append([vertex, vj])
+            vertices.append([vj, vertex])
         
         return vertices
     
@@ -267,7 +268,6 @@ class Graph:
         
         return edge_weight_list
 
-
     def breadth_first_search(self, vi:str = 'v1'):
         """Faz a busca em largura de um vertice, retornando a árvore de busca
         até o momento que o nó foi encontrado.
@@ -293,3 +293,104 @@ class Graph:
                     if w == vi:
                         return search_tree
         return search_tree
+
+    def bellman_ford(self, vertex):
+        search_tree = [f'v{i+1}' for i in range(self.n)]
+
+        costs = [[math.inf for _ in range(self.n)]
+                    for _ in range(self.n+1)]
+        
+        index_vertex = int(vertex.replace('v',''))-1
+        costs[0][index_vertex] = 0
+        
+        for l in range(1, self.n+1):
+            for i in range(self.n):
+                w1 = costs[l-1][i]
+                w2 = math.inf
+                
+                vertices = self.incidence(f'v{i+1}')
+                for vertex in vertices:
+                    j = int(vertex[0].replace('v','')) - 1
+                    w3 = costs[l-1][j] + self.weight_matrix[j][i]
+                    if w3 < w2:
+                        vertex_changes = f'v{j+1}'
+                        w2 = w3
+                
+                if w1 > w2:
+                    costs[l][i] = w2
+                    search_tree[i] = vertex_changes
+                else:
+                    costs[l][i] = w1
+               
+        for i in range(self.n):
+            if costs[self.n-1][i] != costs[self.n-2][i]:
+                raise ExceptionContainsNegativeCycle
+            
+        return [costs[self.n-1], search_tree]
+
+    def get_bellman_ford_result(self, vertex, return_type):
+        has_vi = self.has_vertex(vertex)
+
+        if not has_vi:
+            raise ExceptionVertexDoesNotExist
+        
+        result = self.bellman_ford(vertex)
+        
+        if return_type == 'costs':
+            return result[0]
+        elif return_type == 'shortest_paths':
+            return result[1]
+    
+    def get_shortest_paths(self, vertex):
+        shortest_paths = self.get_bellman_ford_result(vertex, 'shortest_paths')
+        index_vertex = int(vertex.replace('v','')) - 1
+        vertex_paths = {}
+        vertex_paths[vertex] = {}
+        
+        for i in range(self.n):
+            if i != index_vertex:
+                vj = f'v{i+1}'
+                vertex_paths[vertex][vj] = self.get_shortest_path_between_vi_vj(vertex, vj, shortest_paths)
+        
+        return vertex_paths
+    
+    def get_minimal_costs(self, vertex):
+        return self.get_bellman_ford_result(vertex, 'costs')
+
+    def get_one_shortest_path(self, vi, vj):
+        has_vi = self.has_vertex(vi)
+        has_vj = self.has_vertex(vj)
+
+        if not has_vi or not has_vj:
+            raise ExceptionVertexDoesNotExist
+        
+        shortest_paths = self.get_bellman_ford_result(vi, 'shortest_paths')
+        
+        index = int(vj.replace('v','')) - 1
+        if shortest_paths[index] == vj:
+            raise ExceptionDoesNotHaveAPathFromViToVj 
+        
+        return self.get_shortest_path_between_vi_vj(vi, vj, shortest_paths)
+        
+    def get_shortest_path_between_vi_vj(self, vi, vj, shortest_paths):
+        builds = True
+        path_edges = []
+        
+        index = int(vj.replace('v','')) - 1
+        if shortest_paths[index] == vj:
+            return path_edges
+        
+        while builds:
+            index_vertex = int(vj.replace('v','')) - 1
+            aux_vj = vj
+            vj = shortest_paths[index_vertex]
+            
+            if vj == vi:
+                weight = self.adjacency_list[vj][aux_vj]
+                path_edges.insert(0, [vj, aux_vj, weight])
+                builds = False
+            else:
+                weight = self.adjacency_list[vj][aux_vj]
+                path_edges.insert(0, [vj, aux_vj, weight])
+        
+        return path_edges

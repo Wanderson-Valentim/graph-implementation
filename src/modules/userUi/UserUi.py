@@ -1,4 +1,5 @@
 import os
+import math
 import platform
 from ..exceptions.exceptions import *
 from ..graph.Graph import Graph
@@ -40,10 +41,43 @@ class UserUI:
         self.__print_menu_option(option)
         self.__print_text(f'--> {text} <--')
         self.__print_line()
+        
+    
+    def __print_path(self, path):
+        total_cost = int(path[0][2])
+        representation = f'\t    {path[0][0]} --({path[0][2]})--> {path[0][1]}'
+        
+        for i in range(1, len(path)):
+            total_cost += int(path[i][2])
+            representation += f' --({path[i][2]})--> {path[i][1]}'
+        
+        print(representation)
+        print(f'\t    O custo total do caminho é {total_cost}.')
+
+
+    def __print_some_paths(self, vertex_paths):
+        vertex = list(vertex_paths.keys())[0]
+        for vj in vertex_paths[vertex]:
+            if len(vertex_paths[vertex][vj]) == 0:
+                print(f'\t--> Não existe caminho mínimo entre {vertex} e {vj}.\n')
+            else:
+                print(f'\t--> O caminho mínimo entre {vertex} e {vj}.')
+                self.__print_path(vertex_paths[vertex][vj])
+                print()
+
+
+    def __print_costs(self, vertex, costs):
+        index_vertex = int(vertex.replace('v','')) - 1
+        for i in range(len(costs)):
+            if i != index_vertex:
+                if costs[i] == math.inf:
+                    print(f'\t--> O custo mínimo entre {vertex} e v{i+1} é infinito.\n')
+                else:
+                    print(f'\t--> O custo mínimo entre {vertex} e v{i+1} é {costs[i]}.\n')
 
 
     def __graph_from_file(self):
-        data = read_file("graph")
+        data = read_file("graph2")
         name = data['information'][0]
         n = int(data['information'][1])
         m = int(data['information'][2])
@@ -108,7 +142,6 @@ class UserUI:
         except:
             self.__print_header('Opção Inválida. Escolha Novamente!')
 
-    
 
     def __open_option(self, graph, method = None, option = 'graphs'):
         self.__print_menu_option(option)
@@ -398,26 +431,60 @@ class UserUI:
 
     def __shortest_path_screen(self, graph):
         print('\tTela Anterior (0)')
-        print('\tCaminhos Mínimos (1)')
-        print('\tCustos Mínimos (2)')
+        print('\tCaminho Mínimo Entre Dois Vértices (1)')
+        print('\tCustos Mínimos Entre um Vértice e Todos os Outros (2)')
         print('\tCaminhos Mínimos Entre um Vértice e Todos os Outros (3)\n')
         
         try:
             choise = int(input('\tEscolha a Opção -> '))
         
             if choise == 0:
-                self.__print_header('options')
+                self.__print_menu_option('options')
                 self.__options_screen(graph)
             elif choise == 1:
-                print('')
+                vi = input('\tDigite o vertice vi -> ')
+                vj = input('\tDigite o vertice vj -> ')
+                shortest_path = graph.get_one_shortest_path(vi, vj)
+                self.__print_menu_option('shortest_path')
+                self.__print_path(shortest_path)
+                self.__print_line()
+                self.__shortest_path_screen(graph)
+                
             elif choise == 2:
-                print('')
+                vertex = input('\tDigite o vertice -> ')
+                minimal_costs = graph.get_minimal_costs(vertex)
+                self.__print_menu_option('shortest_path')
+                self.__print_costs(vertex, minimal_costs)
+                self.__print_line()
+                self.__shortest_path_screen(graph)
+                
             elif choise == 3:
-                print('')
+                vertex = input('\tDigite o vertice -> ')
+                shortest_paths = graph.get_shortest_paths(vertex)
+                self.__print_menu_option('shortest_path')
+                self.__print_some_paths(shortest_paths)
+                self.__print_line()
+                self.__shortest_path_screen(graph)
+                
             else:
                 raise ExceptionInvalidOperation
-                
+            
+        except ExceptionContainsNegativeCycle:
+            self.__print_header('O grafo possui ciclo negativo!', 'shortest_path')
+            self.__shortest_path_screen(graph)
+        except ExceptionDoesNotHaveAPathFromViToVj:
+            self.__print_header('Não existe um caminho de vi a vj!', 'shortest_path')
+            self.__shortest_path_screen(graph)
+        except ExceptionVertexDoesNotExist:
+            self.__print_header('Vértice Não Existe!', 'shortest_path')
+            self.__shortest_path_screen(graph)
+        except ExceptionEdgeDoesNotExist:
+            self.__print_header('Aresta Não Existe!', 'shortest_path')
+            self.__shortest_path_screen(graph)
         except ExceptionInvalidOperation:
+            self.__print_header('Opção Inválida. Escolha Novamente!', 'shortest_path')
+            self.__shortest_path_screen(graph)
+        except:
             self.__print_header('Opção Inválida. Escolha Novamente!', 'shortest_path')
             self.__shortest_path_screen(graph)
 
