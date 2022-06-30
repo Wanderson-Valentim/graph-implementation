@@ -1,5 +1,6 @@
 import math
 import queue
+from tkinter.tix import Tree
 from ..exceptions.exceptions import *
 
 class Graph:
@@ -394,3 +395,41 @@ class Graph:
                 path_edges.insert(0, [vj, aux_vj, weight])
         
         return path_edges
+    
+    def check_if_it_has_a_complement(self):
+        '''Esse método verifica se pode ser feito o complemento do grafo.
+        O complemento só pode ser feito se o grafo for simples e todos os 
+        pesos forem iguais ou se existe apenas um arco nesse de vi para
+        vj ou vj para vi'''
+        is_simple_graph = self.check_if_the_graph_is_simple()
+        
+        if is_simple_graph:
+            return self.__check_if_it_has_a_complement_simple_graph()
+        else:
+            return self.__check_if_it_has_a_complement_digraf()
+    
+    def __check_if_it_has_a_complement_simple_graph(self):
+        is_first_iteration = True
+        
+        for vi in self.adjacency_list.keys():
+            for vj in self.adjacency_list[vi].keys():
+                if is_first_iteration:
+                    weight = self.adjacency_list[vi][vj]
+                    is_first_iteration = False
+                    
+                elif weight != self.adjacency_list[vi][vj]:
+                    return False
+                    
+        return True
+        
+    def __check_if_it_has_a_complement_digraf(self):
+        for vi in self.adjacency_list.keys():
+            for j in range(self.n):
+                vj = f'v{j+1}'
+                if vi != vj:
+                    vi_in_vj = vi in self.adjacency_list[vj].keys()
+                    vj_in_vi = vj in self.adjacency_list[vi].keys()
+                    pass
+        
+        
+        return True
