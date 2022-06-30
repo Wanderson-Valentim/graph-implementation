@@ -429,7 +429,17 @@ class Graph:
                 if vi != vj:
                     vi_in_vj = vi in self.adjacency_list[vj].keys()
                     vj_in_vi = vj in self.adjacency_list[vi].keys()
-                    pass
-        
+                    
+                    if vi_in_vj and vj_in_vi:
+                        weight_vi_vj = self.adjacency_list[vi][vj]
+                        weight_vj_vi = self.adjacency_list[vj][vi]
+                        
+                        if weight_vi_vj == weight_vj_vi:
+                            return False
+                    
+                    elif vi_in_vj or vj_in_vi:
+                        pass
+                    else:
+                        return False
         
         return True
