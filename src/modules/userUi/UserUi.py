@@ -28,7 +28,7 @@ class UserUI:
 
 
     def __print_line(self):
-        print('-' * self.text_size)
+        print('-' * (self.text_size - 2))
 
 
     def __print_text(self, text: str):
@@ -182,7 +182,7 @@ class UserUI:
             print(NameError)
 
 
-    def __basic_operations_screen(self, graph):
+    def __basic_operations_screen(self, graph: Graph):
         print('\tTela Anterior (0)')
         print('\tAdicionar Vértices (1)') #OK
         print('\tAdicionar Aresta (2)') #OK
@@ -352,7 +352,6 @@ class UserUI:
             elif choise == 13:
                 vi = input('\tDigite o vertice vi -> ')
                 vj = input('\tDigite o vertice vj -> ')
-                os.system('cls')
                 
                 is_adjacent = graph.check_if_is_adjacent(vi, vj)
                 if is_adjacent:
@@ -375,7 +374,11 @@ class UserUI:
                 self.__basic_operations_screen(graph)
                 
             elif choise == 15:
-                print('')
+                is_connected = graph.is_connected()
+                text = 'O grafo é conexo' if is_connected else 'O grafo é desconexo'
+
+                self.__print_header(text, 'basic_operations')
+                self.__basic_operations_screen(graph)
                 
             elif choise == 16:
                 print('')
