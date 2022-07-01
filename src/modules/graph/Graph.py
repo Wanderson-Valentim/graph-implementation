@@ -401,12 +401,21 @@ class Graph:
         O complemento só pode ser feito se o grafo for simples e todos os 
         pesos forem iguais ou se existe apenas um arco nesse de vi para
         vj ou vj para vi'''
+        if self.m == 0:
+            raise ExceptionGraphHasNoComplement
+        
         is_simple_graph = self.check_if_the_graph_is_simple()
         
         if is_simple_graph:
-            return self.__check_if_it_has_a_complement_simple_graph()
+            return {
+                'has_complement': self.__check_if_it_has_a_complement_simple_graph(),
+                'graph_type': 'simple'
+            }
         else:
-            return self.__check_if_it_has_a_complement_digraf()
+            return {
+                'has_complement': self.__check_if_it_has_a_complement_digraf(),
+                'graph_type': 'digraph'
+            }
     
     def __check_if_it_has_a_complement_simple_graph(self):
         is_first_iteration = True
@@ -424,22 +433,57 @@ class Graph:
         
     def __check_if_it_has_a_complement_digraf(self):
         for vi in self.adjacency_list.keys():
+            if not len(self.adjacency_list[vi].keys()):
+                return False
+            
             for j in range(self.n):
                 vj = f'v{j+1}'
                 if vi != vj:
                     vi_in_vj = vi in self.adjacency_list[vj].keys()
                     vj_in_vi = vj in self.adjacency_list[vi].keys()
                     
-                    if vi_in_vj and vj_in_vi:
-                        weight_vi_vj = self.adjacency_list[vi][vj]
-                        weight_vj_vi = self.adjacency_list[vj][vi]
-                        
-                        if weight_vi_vj == weight_vj_vi:
-                            return False
-                    
-                    elif vi_in_vj or vj_in_vi:
-                        pass
-                    else:
+                    if (vi_in_vj and vj_in_vi) or (not vi_in_vj and not vj_in_vi):
                         return False
         
         return True
+    
+    def complement(self):
+        data = self.check_if_it_has_a_complement()
+        
+        if not data['has_complement']:
+            raise ExceptionGraphHasNoComplement
+        
+        if data['graph_type'] == 'simple':
+            return self.__complement_simple_graph()
+        else:
+            return self.__complement_digrapf()
+        
+        
+    def __complement_simple_graph(self):
+        complement = self.createNodes(self.n)
+        weight = self.edges[0][2]
+        
+        for vi in self.adjacency_list.keys():
+            for j in range(self.n):
+                vj = f'v{j+1}'
+                if vi != vj:
+                    vj_in_vi = vj in self.adjacency_list[vi].keys()
+                    
+                    if not vj_in_vi:
+                        complement[vi][vj] = weight
+                        
+        return complement
+    
+    def __complement_digrapf(self):
+        complement = self.createNodes(self.n)
+        
+        for vi in self.adjacency_list.keys():
+            for j in range(self.n):
+                vj = f'v{j+1}'
+                if vi != vj:
+                    vj_in_vi = vj in self.adjacency_list[vi].keys()
+                    
+                    if vj_in_vi:
+                        complement[vj][vi] = self.adjacency_list[vi][vj]
+        
+        return complement

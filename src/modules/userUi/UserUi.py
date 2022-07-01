@@ -76,8 +76,8 @@ class UserUI:
                     print(f'\t--> O custo mínimo entre {vertex} e v{i+1} é {costs[i]}.\n')
 
 
-    def __graph_from_file(self):
-        data = read_file("graph2")
+    def __graph_from_file(self, file_name):
+        data = read_file(file_name)
         name = data['information'][0]
         n = int(data['information'][1])
         m = int(data['information'][2])
@@ -92,7 +92,7 @@ class UserUI:
         name = input('\tEscolha o nome do Grafo: ')
         graph = Graph(name)
         save_graph(name)
-        self.__print_text('options')
+        self.__print_menu_option('options')
         self.__options_screen(graph)
     
 
@@ -106,7 +106,7 @@ class UserUI:
             m = int(saved['graph']['m'])
             edges = saved['graph']['edges']
             graph = Graph(name, n, m, edges)
-            self.__print_text('options')
+            self.__print_menu_option('options')
             self.__options_screen(graph)
         else:
             self.__print_header('Não Possui Grafo Salvo!')
@@ -138,7 +138,13 @@ class UserUI:
             if not(home_screen_option in range(1, 6)):
                 raise ExceptionInvalidOperation
             else:
-                options[home_screen_option - 1][1]()
+                if home_screen_option == 1:
+                    file_name = input('\tDigite o Nome do Arquivo -> ')
+                    options[home_screen_option - 1][1](file_name)
+                else:
+                    options[home_screen_option - 1][1]()
+        except FileNotFoundError:
+            self.__print_header('Não existe arquivo com esse nome!')
         except:
             self.__print_header('Opção Inválida. Escolha Novamente!')
 
@@ -195,7 +201,7 @@ class UserUI:
         print('\tVerifica se Gafro é Conexo (15)')
         print('\tVerifica se Gafro é Bipartido (16)')
         print('\tVerifica se Gafro é Árvore (17)')
-        print('\tComplemento do Grafro(18)\n')
+        print('\tComplemento do Grafro(18)\n')#OK
 
         try:
             choise = int(input('\tEscolha a Opção -> '))
@@ -378,11 +384,19 @@ class UserUI:
                 print('')
             
             elif choise == 18:
-                print('')
+                complement = graph.complement()
+                self.__print_menu_option('basic_operations')
+                print(f'\t--> Lista de Adjacências do Grafo {graph.name}')
+                print(complement)
+                self.__print_line()
+                self.__basic_operations_screen(graph)
                 
             else:
                 raise ExceptionInvalidOperation
-            
+        
+        except ExceptionGraphHasNoComplement:
+            self.__print_header('Não é possível obter o complemento desse grafo!', 'basic_operations')
+            self.__basic_operations_screen(graph)
         except ExceptionDoesNotHaveAPathFromViToVj:
             self.__print_header('Não existe um caminho de vi a vj!', 'basic_operations')
             self.__basic_operations_screen(graph)

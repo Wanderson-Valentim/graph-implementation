@@ -18,3 +18,9 @@ class ExceptionDoesNotHaveAPathFromViToVj(Exception):
 
 class ExceptionContainsNegativeCycle(Exception):
     pass
+
+class ExceptionGraphHasNoComplement(Exception):
+    pass
+
+class ExceptionThereIsNoFileWithThatName(Exception):
+    pass
