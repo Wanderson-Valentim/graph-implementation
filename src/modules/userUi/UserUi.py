@@ -91,9 +91,9 @@ class UserUI:
             for vj in graph.adjacency_list[vi].keys():
                 edges += f'\t    {vi} --({graph.adjacency_list[vi][vj]})--> {vj}\n'
         
-        representation_graph += f'\t--> Vértices de {graph.name}:\n'
+        representation_graph += f'\t--> Vértices do grafo {graph.name}:\n'
         representation_graph += '\t    ' + vertices + '\n\n'
-        representation_graph += f'\t--> Arestas de {graph.name}:\n'
+        representation_graph += f'\t--> Arestas do grafo {graph.name}:\n'
         representation_graph += edges
         print(representation_graph)
     
@@ -355,7 +355,10 @@ class UserUI:
                 self.__basic_operations_screen(graph)
 
             elif choise == 9:
-                pass
+                self.__print_menu_option('basic_operations')
+                self.__print_graph(graph)
+                self.__print_line()
+                self.__basic_operations_screen(graph)
                 
             elif choise == 10:
                 self.__print_menu_option('basic_operations')
