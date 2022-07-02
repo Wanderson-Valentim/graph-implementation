@@ -487,3 +487,15 @@ class Graph:
                         complement[vj][vi] = self.adjacency_list[vi][vj]
         
         return complement
+
+    def is_connected(self):
+        for vertice in self.adjacency_list:
+            search_tree = self.breadth_first_search(vertice)
+            isInThePath = []
+            for v in self.adjacency_list:
+                if v in search_tree:
+                    isInThePath.append(v)
+                if len(isInThePath) == self.n:
+                    return True
+
+        return False
