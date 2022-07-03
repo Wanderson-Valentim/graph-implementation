@@ -239,11 +239,11 @@ class UserUI:
         print('\tImprime Lista de Adjacências (12)') #Ok
         print('\tImprime Lista de Adjacências de um Vértice (13)') #OK
         print('\tVerifica se é Vizinho (14)') #OK
-        print('\tVerifica se Gafro é Simples (15)')#OK
-        print('\tVerifica se Gafro é Conexo (16)')
-        print('\tVerifica se Gafro é Bipartido (17)')
-        print('\tVerifica se Gafro é Árvore (18)')
-        print('\tComplemento do Grafro(19)\n')#OK
+        print('\tVerifica se Grafo é Simples (15)')#OK
+        print('\tVerifica se Grafo é Conexo (16)')
+        print('\tVerifica se Grafo é Bipartido (17)')
+        print('\tVerifica se Grafo é Árvore (18)')
+        print('\tComplemento do Grafo(19)\n')#OK
 
         try:
             choise = int(input('\tEscolha a Opção -> '))
@@ -432,6 +432,11 @@ class UserUI:
                 
             elif choise == 17:
                 print('')
+                is_bipartite = graph.is_bipartite()
+                text = 'O grafo é bipartido' if is_bipartite else 'O grafo não é bipatido'
+
+                self.__print_header(text, 'basic_operations')
+                self.__basic_operations_screen(graph)
                 
             elif choise == 18:
                 print('')

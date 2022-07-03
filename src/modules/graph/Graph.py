@@ -582,3 +582,35 @@ class Graph:
             return True
         
         return False
+    
+
+    def is_bipartite_util(self, colors, v1 = 'v1'):
+        queue = []
+        queue.append(v1)
+
+        while queue:
+            u = queue.pop()
+
+            if u in self.adjacency_list[u]:
+                return False
+            
+            for node in self.adjacency_list:
+                if colors[node] == -1 and node in self.adjacency_list[u]:
+                    colors[node] = 1 - colors[u]
+                    queue.append(node)
+                elif colors[node] == colors[u] and node in self.adjacency_list[u]:
+                    return False
+        
+        return True
+
+
+    def is_bipartite(self):
+        colors = {}
+        for v in self.adjacency_list:
+            colors[v] = -1
+        
+        for v in self.adjacency_list:
+            if colors[v] == -1:
+                if not self.is_bipartite_util(colors, v):
+                    return False
+        return True
