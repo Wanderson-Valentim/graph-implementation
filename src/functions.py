@@ -1,15 +1,6 @@
 import json
 from modules.graph.Graph import Graph
 
-def print_adjacency_list(adjacency_list, vi):
-    print(f'\t[{vi}] --> ', end='')
-    for vertex in adjacency_list[vi]:
-        print(f'[{vertex}] --> ', end='')
-    print('λ')
-
-def print_matrix(matrix):
-    for i in range(len(matrix)):
-        print(f'\t    {matrix[i]}')
 
 #Questão 1
 def read_file(file_name):
@@ -31,6 +22,7 @@ def read_file(file_name):
     
     return data
 
+
 #Salvamento de Grafos em JSON
 def get_saved_graph():
     with open('./settings/saved_graph.json') as my_json:
@@ -38,10 +30,12 @@ def get_saved_graph():
     
     return saved_graph
 
+
 def write_to_file_json(data):
     saved_graph = json.dumps(data, indent=4)
     with open('./settings/saved_graph.json', 'w') as file:
         file.write(saved_graph)
+        
         
 def save_graph(name, n = 1, m = 0, edges = []):
     data = {
@@ -55,6 +49,7 @@ def save_graph(name, n = 1, m = 0, edges = []):
     data['graph']['edges'] = edges
 
     write_to_file_json(data)
+
 
 def remove_saved_graph():
     data = {

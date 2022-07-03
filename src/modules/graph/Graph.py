@@ -12,6 +12,7 @@ class Graph:
         self.adjacency_list = self.generate_adjacency_list(edges, n, m)
         self.generate_adjacency_matrix(edges, n, m)
     
+    
     def createNodes(self, num_vertices: int):
         """Cria os nós de um grafo para um dado número de vértices(num_vertices)"""
         graph = {}
@@ -20,6 +21,7 @@ class Graph:
             graph[f'v{num + 1}'] = {}
         
         return graph
+
 
     def generate_adjacency_list(self, edges: list, num_vertices: int, num_edges: int):
         """Cria uma lista de adjacência com os vertices e suas respectivas arestas(edges) """
@@ -30,6 +32,7 @@ class Graph:
                 graph[edge[0]][edge[1]] = edge[2]
         
         return graph
+    
     
     def generate_adjacency_matrix(self, edges: list, num_vertices: int, num_edges: int):
         adjacency_matrix = [[0 for _ in range(num_vertices)]
@@ -50,9 +53,14 @@ class Graph:
         self.weight_matrix = weight_matrix
         self.adjacency_matrix = adjacency_matrix
     
+    
+    #Questão 3 - item c - EVertice(G, v): Verifica se v ∈ V (G) ou não.
     def has_vertex(self, vertex):
         return vertex in self.adjacency_list.keys()
 
+
+    '''Questão 3 - item f - ExisteAresta(G, vi, vj , ω): Verifica se existe uma aresta 
+    em G entre os vértices vi e vj com peso ω.'''
     def has_edge(self, vi, vj, w):
         has_vi = self.has_vertex(vi)
         has_vj = self.has_vertex(vj)     
@@ -70,7 +78,8 @@ class Graph:
                     return True
         
         return False
-   
+    
+    
     def add_vertices(self, num_vertices):
         if num_vertices < 1:
             raise ExceptionInvalidOperation
@@ -78,6 +87,10 @@ class Graph:
         self.adjacency_list = self.generate_adjacency_list(self.edges, self.n, self.m)
         self.generate_adjacency_matrix(self.edges, self.n, self.m)
     
+    
+    '''Questão 3 - letra d - AddAresta(G, vi, vj , ω): Adiciona uma aresta em 
+    G entre os vértices vi e vj com peso ω. Deve verificar se vi, vj ∈ V (G), 
+    caso contrário a operação não poderá ser efetuada.'''
     def add_edge(self, vi, vj, w):
         has_vi = self.has_vertex(vi)
         has_vj = self.has_vertex(vj)
@@ -104,7 +117,11 @@ class Graph:
             added_vi_vj = True
         
         return added_vi_vj
-        
+
+
+    '''Questão 3 - letra e - RemoveAresta(G, vi, vj , ω): Remove uma aresta em G 
+    entre os vértices vi e vj com peso ω. Deve verificar se vi, vj ∈ V (G) e se 
+    existe uma tal aresta, caso contrário a operação não poderá ser efetuada.'''
     def remove_edge(self, vi, vj, w):
         has_vi_vj = self.has_edge(vi, vj, w)
         removed_vi_vj = False
@@ -129,6 +146,8 @@ class Graph:
         
         return removed_vi_vj
     
+    
+    #Questão 3 - item o - EAdj(G, vi, vj ): Verifica se vivj ∈ E(G).
     def check_if_is_adjacent(self, vi, vj):
         has_vi = self.has_vertex(vi)
         has_vj = self.has_vertex(vj)
@@ -140,6 +159,11 @@ class Graph:
         
         return is_adjacent  
     
+    
+    '''Questão 3 - letra g - MudaPeso(G, vi, vj , ω, ω′): Modifica valor de peso de uma 
+    aresta em G entre os vértices vi e vj de valor ω para o valor ω′. Deve verificar se 
+    vi, vj ∈ V (G) e se existe uma tal aresta, caso contrário a operação não poderá ser 
+    efetuada;'''
     def change_edge_weight(self, vi, vj, old_w, new_w):
         has_edge = self.has_edge(vi, vj, old_w)
         
@@ -155,6 +179,7 @@ class Graph:
             has_been_changed = True
             
         return has_been_changed
+    
     
     def depth_first_search(self, vertex):
         has_vertex = self.has_vertex(vertex)
@@ -177,6 +202,7 @@ class Graph:
         
         return search_tree
 
+
     def visit(self, vertex, search_tree, mark, stack):
         stack.insert(0, vertex)
         for neighbour in self.adjacency_list[vertex]:
@@ -190,6 +216,8 @@ class Graph:
         
         mark[vertex]['color'] = 'black'
         
+        
+    #Questão 3 - item k - GrafoSimples(G): Retorna se o grafo G é um grafo simples ou não.
     def check_if_the_graph_is_simple(self):
         for vi in self.adjacency_list.keys():
             for vj in self.adjacency_list[vi].keys():
@@ -206,6 +234,8 @@ class Graph:
         
         return True
 
+
+    '''Questão 3 - item q - Incidencia(G, v): Devolve as arestas incidentes a v em G. Deve verificar se v ∈ V (G), caso contrário a operação não poderá ser efetuada.'''
     def incidence(self, vertex):
         has_vertex = self.has_vertex(vertex)
 
@@ -220,6 +250,7 @@ class Graph:
             vertices = self.incidence_digraph(vertex)
             
         return vertices
+          
             
     def incidence_digraph(self, vertex):
         vertices = []
@@ -232,6 +263,7 @@ class Graph:
         
         return vertices
     
+    
     def incidence_simple_graph(self, vertex):
         vertices = []
         
@@ -240,6 +272,10 @@ class Graph:
         
         return vertices
     
+    
+    '''Questão 3 - letra j - RecuperaPeso(G, vi, vj ): Devolve a lista de pesos de todas 
+    as arestas entre os vértices vi e vj em V (G). Deve verificar se vi, vj ∈ V (G), 
+    caso contrário a operação não poderá ser efetuada;'''
     def regain_weight(self, vi, vj):
         search_tree = self.depth_first_search(vi)
         has_vj = self.has_vertex(vj)
@@ -269,6 +305,7 @@ class Graph:
         
         return edge_weight_list
 
+
     def breadth_first_search(self, vi:str = 'v1'):
         """Faz a busca em largura de um vertice, retornando a árvore de busca
         até o momento que o nó foi encontrado.
@@ -295,6 +332,8 @@ class Graph:
                         return search_tree
         return search_tree
 
+
+    #Questão 5 - Caminhos mínimos
     def bellman_ford(self, vertex):
         search_tree = [f'v{i+1}' for i in range(self.n)]
 
@@ -329,6 +368,7 @@ class Graph:
             
         return [costs[self.n-1], search_tree]
 
+
     def get_bellman_ford_result(self, vertex, return_type):
         has_vi = self.has_vertex(vertex)
 
@@ -342,6 +382,8 @@ class Graph:
         elif return_type == 'shortest_paths':
             return result[1]
     
+    
+    #Questão 5 - item  c - CaminhoMinimo(G, v): Devolve os caminhos mínimos entre vi ∈ V (G) e todos os demais vértices de G.
     def get_shortest_paths(self, vertex):
         shortest_paths = self.get_bellman_ford_result(vertex, 'shortest_paths')
         index_vertex = int(vertex.replace('v','')) - 1
@@ -355,9 +397,13 @@ class Graph:
         
         return vertex_paths
     
+    
+    #Questão 5 - item b - CustoMinimo(G, v): Devolve os custos dos caminhos mínimos entre vi ∈ V (G) e todos os demais vérticesde G.
     def get_minimal_costs(self, vertex):
         return self.get_bellman_ford_result(vertex, 'costs')
 
+
+    #Questão 5 - item a - CaminhoMinimo(G, vi, vj ): Devolve um caminho mínimo entre vi e vj no grafo G.
     def get_one_shortest_path(self, vi, vj):
         has_vi = self.has_vertex(vi)
         has_vj = self.has_vertex(vj)
@@ -372,6 +418,7 @@ class Graph:
             raise ExceptionDoesNotHaveAPathFromViToVj 
         
         return self.get_shortest_path_between_vi_vj(vi, vj, shortest_paths)
+        
         
     def get_shortest_path_between_vi_vj(self, vi, vj, shortest_paths):
         builds = True
@@ -396,57 +443,8 @@ class Graph:
         
         return path_edges
     
-    def check_if_it_has_a_complement(self):
-        '''Esse método verifica se pode ser feito o complemento do grafo.
-        O complemento só pode ser feito se o grafo for simples e todos os 
-        pesos forem iguais ou se existe apenas um arco nesse de vi para
-        vj ou vj para vi'''
-        if self.m == 0:
-            raise ExceptionGraphHasNoComplement
-        
-        is_simple_graph = self.check_if_the_graph_is_simple()
-        
-        if is_simple_graph:
-            return {
-                'has_complement': self.__check_if_it_has_a_complement_simple_graph(),
-                'graph_type': 'simple'
-            }
-        else:
-            return {
-                'has_complement': self.__check_if_it_has_a_complement_digraf(),
-                'graph_type': 'digraph'
-            }
     
-    def __check_if_it_has_a_complement_simple_graph(self):
-        is_first_iteration = True
-        
-        for vi in self.adjacency_list.keys():
-            for vj in self.adjacency_list[vi].keys():
-                if is_first_iteration:
-                    weight = self.adjacency_list[vi][vj]
-                    is_first_iteration = False
-                    
-                elif weight != self.adjacency_list[vi][vj]:
-                    return False
-                    
-        return True
-        
-    def __check_if_it_has_a_complement_digraf(self):
-        for vi in self.adjacency_list.keys():
-            if not len(self.adjacency_list[vi].keys()):
-                return False
-            
-            for j in range(self.n):
-                vj = f'v{j+1}'
-                if vi != vj:
-                    vi_in_vj = vi in self.adjacency_list[vj].keys()
-                    vj_in_vi = vj in self.adjacency_list[vi].keys()
-                    
-                    if (vi_in_vj and vj_in_vi) or (not vi_in_vj and not vj_in_vi):
-                        return False
-        
-        return True
-    
+    '''Quaetão 3 - item n - Complemento(G): Retorna o grafo complementar G de G.'''
     def complement(self):
         data = self.check_if_it_has_a_complement()
         
@@ -474,6 +472,7 @@ class Graph:
                         
         return complement
     
+    
     def __complement_digrapf(self):
         complement = self.createNodes(self.n)
         
@@ -487,6 +486,61 @@ class Graph:
                         complement[vj][vi] = self.adjacency_list[vi][vj]
         
         return complement
+    
+    
+    def check_if_it_has_a_complement(self):
+        '''Esse método verifica se pode ser feito o complemento do grafo.
+        O complemento só pode ser feito se o grafo for simples e todos os 
+        pesos forem iguais ou se existe apenas um arco nesse de vi para
+        vj ou vj para vi'''
+        if self.m == 0:
+            raise ExceptionGraphHasNoComplement
+        
+        is_simple_graph = self.check_if_the_graph_is_simple()
+        
+        if is_simple_graph:
+            return {
+                'has_complement': self.__check_if_it_has_a_complement_simple_graph(),
+                'graph_type': 'simple'
+            }
+        else:
+            return {
+                'has_complement': self.__check_if_it_has_a_complement_digraf(),
+                'graph_type': 'digraph'
+            }
+    
+    
+    def __check_if_it_has_a_complement_simple_graph(self):
+        is_first_iteration = True
+        
+        for vi in self.adjacency_list.keys():
+            for vj in self.adjacency_list[vi].keys():
+                if is_first_iteration:
+                    weight = self.adjacency_list[vi][vj]
+                    is_first_iteration = False
+                    
+                elif weight != self.adjacency_list[vi][vj]:
+                    return False
+                    
+        return True
+        
+        
+    def __check_if_it_has_a_complement_digraf(self):
+        for vi in self.adjacency_list.keys():
+            if not len(self.adjacency_list[vi].keys()):
+                return False
+            
+            for j in range(self.n):
+                vj = f'v{j+1}'
+                if vi != vj:
+                    vi_in_vj = vi in self.adjacency_list[vj].keys()
+                    vj_in_vi = vj in self.adjacency_list[vi].keys()
+                    
+                    if (vi_in_vj and vj_in_vi) or (not vi_in_vj and not vj_in_vi):
+                        return False
+        
+        return True
+
 
     def is_connected(self):
         for vertice in self.adjacency_list:

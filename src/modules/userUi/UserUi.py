@@ -74,6 +74,46 @@ class UserUI:
                     print(f'\t--> O custo mínimo entre {vertex} e v{i+1} é infinito.\n')
                 else:
                     print(f'\t--> O custo mínimo entre {vertex} e v{i+1} é {costs[i]}.\n')
+                    
+
+    #Questão 3 - item h - ImprimeGrafo(G): Imprime todos os vértices e arestas de G.
+    def __print_graph(self, graph):
+        is_first_iteration = True
+        representation_graph, vertices, edges = '', '', ''
+        
+        for vi in graph.adjacency_list.keys():
+            if is_first_iteration:
+                vertices += f'{vi}'
+                is_first_iteration = False
+            else:
+                vertices += f' - {vi}'
+                
+            for vj in graph.adjacency_list[vi].keys():
+                edges += f'\t    {vi} --({graph.adjacency_list[vi][vj]})--> {vj}\n'
+        
+        representation_graph += f'\t--> Vértices do grafo {graph.name}:\n'
+        representation_graph += '\t    ' + vertices + '\n\n'
+        representation_graph += f'\t--> Arestas do grafo {graph.name}:\n'
+        representation_graph += edges
+        print(representation_graph)
+    
+    
+    def __print_adjacency_list(self, adjacency_list, vi):
+        print(f'\t[{vi}] --> ', end='')
+        for vertex in adjacency_list[vi]:
+            print(f'[{vertex}] --> ', end='')
+        print('λ')
+
+
+    #Questão 3 - item s - ImprimeMatrizAdj(G): Imprime a matriz de adjacência de G.
+    def __print_adjacency_matrix(self, graph):
+        for i in range(len(graph.adjacency_matrix)):
+            print(f'\t    {graph.adjacency_matrix[i]}')
+            
+    
+    def __print_matrix(self, matrix):
+        for i in range(len(matrix)):
+            print(f'\t    {matrix[i]}')
 
 
     def __graph_from_file(self, file_name):
@@ -87,7 +127,8 @@ class UserUI:
         self.__print_menu_option('options')
         self.__options_screen(graph)
     
-
+    
+    #Questão 3 - item i - RemoveGrafo(G): Libera todo o espaço utilizado pela representação de G.
     def __new_graph(self):
         name = input('\tEscolha o nome do Grafo: ')
         graph = Graph(name)
@@ -111,7 +152,7 @@ class UserUI:
         else:
             self.__print_header('Não Possui Grafo Salvo!')
     
-
+    #Questão 3 - item i - 
     def __remove_graph(self):
         remove_saved_graph()
         self.__print_header('Grafo Removido!')
@@ -192,16 +233,17 @@ class UserUI:
         print('\tIncidência (6)')#OK
         print('\tVerificar se Vértice Pertence ao Grafo (7)') #OK
         print('\tVerificar se Aresta Pertence ao Grafo (8)') #OK
-        print('\tImprime Matriz de Pesos (9)') #Ok
-        print('\tImprime Matriz de Adjacências (10)') #OK
-        print('\tImprime Lista de Adjacências (11)') #Ok
-        print('\tImprime Lista de Adjacências de um Vértice (12)') #OK
-        print('\tVerifica se é Vizinho (13)') #OK
-        print('\tVerifica se Gafro é Simples (14)')#OK
-        print('\tVerifica se Gafro é Conexo (15)')
-        print('\tVerifica se Gafro é Bipartido (16)')
-        print('\tVerifica se Gafro é Árvore (17)')
-        print('\tComplemento do Grafro(18)\n')#OK
+        print('\tImprime Grafo (9)')
+        print('\tImprime Matriz de Pesos (10)') #Ok
+        print('\tImprime Matriz de Adjacências (11)') #OK
+        print('\tImprime Lista de Adjacências (12)') #Ok
+        print('\tImprime Lista de Adjacências de um Vértice (13)') #OK
+        print('\tVerifica se é Vizinho (14)') #OK
+        print('\tVerifica se Gafro é Simples (15)')#OK
+        print('\tVerifica se Gafro é Conexo (16)')
+        print('\tVerifica se Gafro é Bipartido (17)')
+        print('\tVerifica se Gafro é Árvore (18)')
+        print('\tComplemento do Grafro(19)\n')#OK
 
         try:
             choise = int(input('\tEscolha a Opção -> '))
@@ -279,7 +321,7 @@ class UserUI:
                     print(f'\t--> Não tem arestas incidentes a {vertex}')
                 else:
                     print(f'\t--> Arestas incidentes a {vertex}')
-                    print_matrix(vertices)
+                    self.__print_matrix(vertices)
                 
                 self.__print_line()
                 
@@ -311,45 +353,53 @@ class UserUI:
                 
                 self.__print_header(text, 'basic_operations')
                 self.__basic_operations_screen(graph)
-                
+
             elif choise == 9:
                 self.__print_menu_option('basic_operations')
+                self.__print_graph(graph)
+                self.__print_line()
+                self.__basic_operations_screen(graph)
+                
+            elif choise == 10:
+                self.__print_menu_option('basic_operations')
                 print(f'\t--> Matriz de Pesos do Grafo {graph.name}')
-                print_matrix(graph.weight_matrix)
+                self.__print_matrix(graph.weight_matrix)
                 self.__print_line()
                 
                 self.__basic_operations_screen(graph)
             
-            elif choise == 10:
+            elif choise == 11:
                 self.__print_menu_option('basic_operations')
                 print(f'\t--> Matriz de Adjacências do Grafo {graph.name}')
-                print_matrix(graph.adjacency_matrix)
+                self.__print_adjacency_matrix(graph)
                 self.__print_line()
                 
                 self.__basic_operations_screen(graph)
-                
-            elif choise == 11:
+            
+            #Questão 3 - item b - Grafo(G): Retorna uma representação por listas de adjacências de G.
+            elif choise == 12:
                 self.__print_menu_option('basic_operations')
                 print(f'\t--> Lista de Adjacências do Grafo {graph.name}')
                 for vertex in graph.adjacency_list:         
-                    print_adjacency_list(graph.adjacency_list, vertex)
+                    self.__print_adjacency_list(graph.adjacency_list, vertex)
                 self.__print_line()
                 self.__basic_operations_screen(graph)
-                
-            elif choise == 12:
+            
+            #Questão 3 - item p - Adjacencia(G, v): Devolve a lista de adjacência de v em G. Deve verificar se v ∈ V (G), caso contrário a operação não poderá ser efetuada.
+            elif choise == 13:
                 vertex = input('\tDigite o vertice vi -> ')
                 self.__print_menu_option('basic_operations')
                 print(f'\t--> Lista de Adjacências do Vértice {vertex}')
                 has_vertex = graph.has_vertex(vertex)
                 if has_vertex:
-                    print_adjacency_list(graph.adjacency_list, vertex)
+                    self.__print_adjacency_list(graph.adjacency_list, vertex)
                 else:
                     raise ExceptionVertexDoesNotExist
                                 
                 self.__print_line()
                 self.__basic_operations_screen(graph)
                 
-            elif choise == 13:
+            elif choise == 14:
                 vi = input('\tDigite o vertice vi -> ')
                 vj = input('\tDigite o vertice vj -> ')
                 
@@ -362,7 +412,7 @@ class UserUI:
                 self.__print_header(text, 'basic_operations')
                 self.__basic_operations_screen(graph)
                 
-            elif choise == 14:
+            elif choise == 15:
                 is_simple = graph.check_if_the_graph_is_simple()
                 if is_simple:
                     text = f'O grafo {graph.name} é simples.'
@@ -373,20 +423,20 @@ class UserUI:
                 
                 self.__basic_operations_screen(graph)
                 
-            elif choise == 15:
+            elif choise == 16:
                 is_connected = graph.is_connected()
                 text = 'O grafo é conexo' if is_connected else 'O grafo é desconexo'
 
                 self.__print_header(text, 'basic_operations')
                 self.__basic_operations_screen(graph)
                 
-            elif choise == 16:
-                print('')
-                
             elif choise == 17:
                 print('')
-            
+                
             elif choise == 18:
+                print('')
+            
+            elif choise == 19:
                 complement = graph.complement()
                 self.__print_menu_option('basic_operations')
                 print(f'\t--> Lista de Adjacências do Grafo {graph.name}')
