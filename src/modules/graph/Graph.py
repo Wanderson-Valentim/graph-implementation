@@ -1,6 +1,5 @@
 import math
 import queue
-from tkinter.tix import Tree
 from ..exceptions.exceptions import *
 
 class Graph:
@@ -542,14 +541,44 @@ class Graph:
         return True
 
 
-    def is_connected(self):
-        for vertice in self.adjacency_list:
-            search_tree = self.breadth_first_search(vertice)
-            isInThePath = []
-            for v in self.adjacency_list:
-                if v in search_tree:
-                    isInThePath.append(v)
-                if len(isInThePath) == self.n:
-                    return True
 
+    def has_cycle(self, v, visited, parent = None):
+        visited[v] = True
+
+        for node in self.adjacency_list[v]:
+            if visited[node] == False:
+                if self.has_cycle(node, visited, v) == True:
+                    return True
+            elif node != parent:
+                return True
+
+        return False
+
+
+    def is_connected(self):
+        visited = {}
+        for v in self.adjacency_list:
+            visited[v] = False
+        
+        self.has_cycle('v1', visited)
+        
+        for node in self.adjacency_list:
+            if visited[node] == False:
+                return False
+    
+        return True
+
+
+
+    def is_tree(self):
+        visited = {}
+        for v in self.adjacency_list:
+            visited[v] = False
+        
+        if self.has_cycle('v1', visited) == True:
+            return False
+        
+        if self.is_connected():
+            return True
+        
         return False

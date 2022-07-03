@@ -435,6 +435,11 @@ class UserUI:
                 
             elif choise == 18:
                 print('')
+                is_tree = graph.is_tree()
+                text = 'O grafo é uma árvore' if is_tree else 'O grafo não é uma árvore'
+
+                self.__print_header(text, 'basic_operations')
+                self.__basic_operations_screen(graph)
             
             elif choise == 19:
                 complement = graph.complement()
