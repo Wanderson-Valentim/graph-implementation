@@ -174,6 +174,9 @@ class Graph:
             self.edges[index] = [vi, vj, new_w]
             
             self.adjacency_list[vi][vj] = new_w
+            
+            i, j = int(vi.replace('v','')) - 1, int(vj.replace('v','')) - 1
+            self.weight_matrix[i][j] = new_w
         
             has_been_changed = True
             
@@ -250,7 +253,7 @@ class Graph:
             
         return vertices
           
-            
+        
     def incidence_digraph(self, vertex):
         vertices = []
         
@@ -569,7 +572,6 @@ class Graph:
         return True
 
 
-
     def is_tree(self):
         visited = {}
         for v in self.adjacency_list:
@@ -582,3 +584,14 @@ class Graph:
             return True
         
         return False
+    
+    
+    '''Questão 3 - item p - Adjacencia(G, v): Devolve a lista de adjacência de v em G. 
+    Deve verificar se v ∈ V (G), caso contrário a operação não poderá ser efetuada.'''
+    def get_adjacency_list(self, vertex):
+        has_vertex = self.has_vertex(vertex)
+
+        if not has_vertex:
+            raise ExceptionVertexDoesNotExist
+        
+        return self.adjacency_list[vertex]
