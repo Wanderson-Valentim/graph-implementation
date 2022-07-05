@@ -98,9 +98,16 @@ class UserUI:
         print(representation_graph)
     
     
-    def __print_adjacency_list(self, adjacency_list, vi):
+    def __print_adjacency_lists(self, adjacency_list, vi):
         print(f'\t[{vi}] --> ', end='')
         for vertex in adjacency_list[vi]:
+            print(f'[{vertex}] --> ', end='')
+        print('λ')
+    
+    
+    def __print_adjacency_list_vertex(self, adjacency_list, vi):
+        print(f'\t[{vi}] --> ', end='')
+        for vertex in adjacency_list:
             print(f'[{vertex}] --> ', end='')
         print('λ')
 
@@ -128,7 +135,7 @@ class UserUI:
         self.__options_screen(graph)
     
     
-    #Questão 3 - item i - RemoveGrafo(G): Libera todo o espaço utilizado pela representação de G.
+    #Questão 3 - item a - NovoGrafo(): Retorna um grafo vazio, ou seja, com apenas um novo vértice.
     def __new_graph(self):
         name = input('\tEscolha o nome do Grafo: ')
         graph = Graph(name)
@@ -152,7 +159,7 @@ class UserUI:
         else:
             self.__print_header('Não Possui Grafo Salvo!')
     
-    #Questão 3 - item i - 
+    #Questão 3 - item i - RemoveGrafo(G): Libera todo o espaço utilizado pela representação de G.
     def __remove_graph(self):
         remove_saved_graph()
         self.__print_header('Grafo Removido!')
@@ -381,7 +388,7 @@ class UserUI:
                 self.__print_menu_option('basic_operations')
                 print(f'\t--> Lista de Adjacências do Grafo {graph.name}')
                 for vertex in graph.adjacency_list:         
-                    self.__print_adjacency_list(graph.adjacency_list, vertex)
+                    self.__print_adjacency_lists(graph.adjacency_list, vertex)
                 self.__print_line()
                 self.__basic_operations_screen(graph)
             
@@ -390,11 +397,9 @@ class UserUI:
                 vertex = input('\tDigite o vertice vi -> ')
                 self.__print_menu_option('basic_operations')
                 print(f'\t--> Lista de Adjacências do Vértice {vertex}')
-                has_vertex = graph.has_vertex(vertex)
-                if has_vertex:
-                    self.__print_adjacency_list(graph.adjacency_list, vertex)
-                else:
-                    raise ExceptionVertexDoesNotExist
+                
+                adjacency_list = graph.get_adjacency_list(vertex)
+                self.__print_adjacency_list_vertex(adjacency_list, vertex)
                                 
                 self.__print_line()
                 self.__basic_operations_screen(graph)
